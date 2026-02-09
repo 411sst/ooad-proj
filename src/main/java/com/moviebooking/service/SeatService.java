@@ -1,11 +1,11 @@
 package com.moviebooking.service;
 
 import com.moviebooking.entity.*;
-import com.moviebooking.entity.enums.BookingStatus;
 import com.moviebooking.exception.BadRequestException;
 import com.moviebooking.exception.ResourceNotFoundException;
 import com.moviebooking.patterns.observer.SeatAvailabilitySubject;
 import com.moviebooking.patterns.observer.SeatUpdateEvent;
+import com.moviebooking.patterns.strategy.PricingEngine;
 import com.moviebooking.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +28,17 @@ public class SeatService {
     private final BookingSeatRepository bookingSeatRepository;
     private final ShowtimeRepository showtimeRepository;
     private final SeatAvailabilitySubject seatAvailabilitySubject;
+    private final PricingEngine pricingEngine;
 
     public SeatService(SeatRepository seatRepository, SeatLockRepository seatLockRepository,
                        BookingSeatRepository bookingSeatRepository, ShowtimeRepository showtimeRepository,
-                       SeatAvailabilitySubject seatAvailabilitySubject) {
+                       SeatAvailabilitySubject seatAvailabilitySubject, PricingEngine pricingEngine) {
         this.seatRepository = seatRepository;
         this.seatLockRepository = seatLockRepository;
         this.bookingSeatRepository = bookingSeatRepository;
         this.showtimeRepository = showtimeRepository;
         this.seatAvailabilitySubject = seatAvailabilitySubject;
+        this.pricingEngine = pricingEngine;
     }
 
     public Map<String, Object> getSeatMapForShowtime(Long showtimeId) {
@@ -54,7 +56,9 @@ public class SeatService {
             seatInfo.put("row", seat.getRowLetter());
             seatInfo.put("number", seat.getSeatNumber());
             seatInfo.put("type", seat.getSeatType().name());
-            seatInfo.put("price", seat.getBasePrice());
+            // Strategy Pattern: Apply dynamic pricing
+            seatInfo.put("basePrice", seat.getBasePrice());
+            seatInfo.put("price", pricingEngine.calculateFinalPrice(seat.getBasePrice(), showtime));
 
             if (bookedSeatIds.contains(seat.getId())) {
                 seatInfo.put("status", "BOOKED");
@@ -75,6 +79,7 @@ public class SeatService {
         result.put("columns", showtime.getScreen().getColumns());
         result.put("totalSeats", showtime.getTotalSeats());
         result.put("availableSeats", showtime.getAvailableSeats());
+        result.put("pricingStrategy", showtime.getPricingStrategy());
         result.put("seats", seatData);
         return result;
     }

@@ -96,7 +96,16 @@ async function loadBooking() {
             <div class="d-flex justify-content-between"><span>GST (18%)</span><span>₹${bookingData.taxAmount}</span></div>
             ${parseFloat(bookingData.discountAmount) > 0 ? `<div class="d-flex justify-content-between text-success"><span>Discount</span><span>-₹${bookingData.discountAmount}</span></div>` : ''}
             <hr>
-            <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span class="text-success">₹${bookingData.totalAmount}</span></div>
+            <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span class="text-success" id="totalDisplay">₹${bookingData.totalAmount}</span></div>
+
+            <!-- Promo Code -->
+            <hr>
+            <div class="input-group mt-2">
+                <input type="text" class="form-control" id="promoCode" placeholder="Enter promo code">
+                <button class="btn btn-outline-success" onclick="applyPromo()">Apply</button>
+            </div>
+            <div id="promoMsg" class="mt-1"></div>
+            <small class="text-muted">Try: FIRST50, WEEKEND20, STUDENT15</small>
         `;
     }
 }
@@ -161,6 +170,28 @@ async function processPayment() {
         errorAlert.classList.remove('d-none');
         btn.disabled = false;
         spinner.classList.add('d-none');
+    }
+}
+
+async function applyPromo() {
+    const code = document.getElementById('promoCode').value;
+    if (!code) return;
+    try {
+        const res = await fetch('/api/promo/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ bookingId: parseInt(bookingId), code: code })
+        });
+        const data = await res.json();
+        if (data.success) {
+            bookingData = data.data;
+            document.getElementById('promoMsg').innerHTML = '<span class="text-success"><i class="fas fa-check me-1"></i>Promo code applied! Discount: ₹' + bookingData.discountAmount + '</span>';
+            loadBooking(); // Refresh display
+        } else {
+            document.getElementById('promoMsg').innerHTML = '<span class="text-danger"><i class="fas fa-times me-1"></i>' + data.message + '</span>';
+        }
+    } catch(e) {
+        document.getElementById('promoMsg').innerHTML = '<span class="text-danger">Error applying promo code</span>';
     }
 }
 

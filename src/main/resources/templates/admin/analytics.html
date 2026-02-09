@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Analytics')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white"><h6 class="mb-0"><i class="fas fa-cog me-1"></i>Admin Panel</h6></div>
+                <div class="list-group list-group-flush">
+                    <a href="/admin" class="list-group-item list-group-item-action"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/movies" class="list-group-item list-group-item-action"><i class="fas fa-film me-2"></i>Movies</a>
+                    <a href="/admin/theaters" class="list-group-item list-group-item-action"><i class="fas fa-building me-2"></i>Theaters</a>
+                    <a href="/admin/showtimes" class="list-group-item list-group-item-action"><i class="fas fa-calendar me-2"></i>Showtimes</a>
+                    <a href="/admin/users" class="list-group-item list-group-item-action"><i class="fas fa-users me-2"></i>Users</a>
+                    <a href="/admin/analytics" class="list-group-item list-group-item-action active"><i class="fas fa-chart-bar me-2"></i>Analytics</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Analytics & Reports</h3>
+
+            <!-- Summary Cards -->
+            <div class="row g-3 mb-4" id="summaryCards">
+                <div class="col-12 text-center"><div class="spinner-border text-primary"></div></div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Revenue Chart -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between">
+                            <h6 class="mb-0">Daily Revenue (Last 7 Days)</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="revenueChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Status -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header"><h6 class="mb-0">Booking Status</h6></div>
+                        <div class="card-body" id="bookingStatus">
+                            <div class="text-center"><div class="spinner-border spinner-border-sm"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movie Performance -->
+                <div class="col-md-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header"><h6 class="mb-0">Movie Performance</h6></div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead><tr><th>Movie</th><th>Genre</th><th>Bookings</th><th>Seats Booked</th><th>Revenue</th><th>Status</th></tr></thead>
+                                    <tbody id="moviePerfTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theater Occupancy -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header"><h6 class="mb-0">Theater Occupancy</h6></div>
+                        <div class="card-body" id="theaterOccupancy">
+                            <div class="text-center"><div class="spinner-border spinner-border-sm"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header"><h6 class="mb-0">Payment Methods</h6></div>
+                        <div class="card-body" id="paymentMethods">
+                            <div class="text-center"><div class="spinner-border spinner-border-sm"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const token = localStorage.getItem('accessToken');
+if (!token) { window.location.href = '/login'; }
+const headers = { 'Authorization': 'Bearer ' + token };
+
+async function loadSummary() {
+    const res = await fetch('/api/admin/analytics/summary', { headers });
+    const data = await res.json();
+    if (data.success) {
+        const s = data.data;
+        document.getElementById('summaryCards').innerHTML = `
+            <div class="col-md-2"><div class="card bg-success text-white"><div class="card-body text-center">
+                <h6>Total Revenue</h6><h4>₹${s.totalRevenue}</h4>
+            </div></div></div>
+            <div class="col-md-2"><div class="card bg-primary text-white"><div class="card-body text-center">
+                <h6>This Week</h6><h4>₹${s.weekRevenue}</h4>
+            </div></div></div>
+            <div class="col-md-2"><div class="card bg-info text-white"><div class="card-body text-center">
+                <h6>Confirmed</h6><h4>${s.confirmedBookings}</h4>
+            </div></div></div>
+            <div class="col-md-2"><div class="card bg-danger text-white"><div class="card-body text-center">
+                <h6>Cancelled</h6><h4>${s.cancelledBookings}</h4>
+            </div></div></div>
+            <div class="col-md-2"><div class="card bg-warning text-dark"><div class="card-body text-center">
+                <h6>Avg Value</h6><h4>₹${s.avgBookingValue}</h4>
+            </div></div></div>
+            <div class="col-md-2"><div class="card bg-dark text-white"><div class="card-body text-center">
+                <h6>Users</h6><h4>${s.totalUsers}</h4>
+            </div></div></div>
+        `;
+    }
+}
+
+async function loadRevenue() {
+    const res = await fetch('/api/admin/analytics/revenue/daily?days=7', { headers });
+    const data = await res.json();
+    if (data.success) {
+        const chart = document.getElementById('revenueChart');
+        const maxRevenue = Math.max(...data.data.map(d => parseFloat(d.revenue)), 1);
+        chart.innerHTML = `<div class="d-flex align-items-end justify-content-around h-100">
+            ${data.data.map(d => {
+                const height = (parseFloat(d.revenue) / maxRevenue) * 250;
+                return `<div class="text-center">
+                    <div class="bg-success rounded-top" style="width:60px;height:${Math.max(height, 5)}px;" title="₹${d.revenue}"></div>
+                    <small class="text-muted">${d.date.substring(5)}</small>
+                    <br><small class="fw-bold">₹${d.revenue}</small>
+                </div>`;
+            }).join('')}
+        </div>`;
+    }
+}
+
+async function loadBookingStatus() {
+    const res = await fetch('/api/admin/analytics/bookings/status', { headers });
+    const data = await res.json();
+    if (data.success) {
+        const colors = { CONFIRMED: 'success', PENDING: 'warning', LOCKED: 'info', CANCELLED: 'danger', REFUNDED: 'secondary' };
+        document.getElementById('bookingStatus').innerHTML = Object.entries(data.data).map(([status, count]) =>
+            `<div class="d-flex justify-content-between mb-2">
+                <span class="badge bg-${colors[status] || 'dark'}">${status}</span>
+                <strong>${count}</strong>
+            </div>`
+        ).join('');
+    }
+}
+
+async function loadMoviePerf() {
+    const res = await fetch('/api/admin/analytics/movies/performance', { headers });
+    const data = await res.json();
+    if (data.success) {
+        document.getElementById('moviePerfTable').innerHTML = data.data.map(m => `
+            <tr>
+                <td><strong>${m.movieTitle}</strong></td>
+                <td>${m.genre}</td>
+                <td>${m.totalBookings}</td>
+                <td>${m.totalSeatsBooked}</td>
+                <td class="text-success fw-bold">₹${m.totalRevenue}</td>
+                <td><span class="badge bg-${m.status === 'NOW_SHOWING' ? 'success' : m.status === 'UPCOMING' ? 'warning' : 'secondary'}">${m.status}</span></td>
+            </tr>
+        `).join('') || '<tr><td colspan="6" class="text-center text-muted">No data</td></tr>';
+    }
+}
+
+async function loadTheaterOcc() {
+    const res = await fetch('/api/admin/analytics/theaters/occupancy', { headers });
+    const data = await res.json();
+    if (data.success) {
+        document.getElementById('theaterOccupancy').innerHTML = data.data.map(t => `
+            <div class="mb-3">
+                <div class="d-flex justify-content-between">
+                    <strong>${t.theaterName}</strong>
+                    <span class="badge bg-${parseFloat(t.occupancyRate) > 50 ? 'success' : 'warning'}">${t.occupancyRate}%</span>
+                </div>
+                <div class="progress" style="height:20px">
+                    <div class="progress-bar bg-${parseFloat(t.occupancyRate) > 70 ? 'success' : parseFloat(t.occupancyRate) > 30 ? 'warning' : 'danger'}"
+                         style="width:${t.occupancyRate}%">${t.occupancyRate}%</div>
+                </div>
+                <small class="text-muted">${t.totalBooked}/${t.totalCapacity} seats | ${t.totalShowtimes} shows</small>
+            </div>
+        `).join('') || '<p class="text-muted">No data</p>';
+    }
+}
+
+async function loadPaymentMethods() {
+    const res = await fetch('/api/admin/analytics/payments/methods', { headers });
+    const data = await res.json();
+    if (data.success) {
+        const total = Object.values(data.data).reduce((a, b) => a + b, 0);
+        const colors = { CREDIT_CARD: 'primary', DEBIT_CARD: 'info', UPI: 'success', NET_BANKING: 'warning', WALLET: 'danger' };
+        document.getElementById('paymentMethods').innerHTML = total > 0 ?
+            Object.entries(data.data).map(([method, count]) => `
+                <div class="d-flex justify-content-between mb-2">
+                    <span><span class="badge bg-${colors[method] || 'dark'}">${method.replace('_', ' ')}</span></span>
+                    <span>${count} (${((count/total)*100).toFixed(0)}%)</span>
+                </div>
+            `).join('') : '<p class="text-muted">No payment data yet</p>';
+    }
+}
+
+loadSummary();
+loadRevenue();
+loadBookingStatus();
+loadMoviePerf();
+loadTheaterOcc();
+loadPaymentMethods();
+</script>
+</body>
+</html>

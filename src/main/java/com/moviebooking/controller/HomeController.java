@@ -86,4 +86,9 @@ public class HomeController {
     public String adminUsers() {
         return "admin/users";
     }
+
+    @GetMapping("/admin/analytics")
+    public String adminAnalytics() {
+        return "admin/analytics";
+    }
 }
