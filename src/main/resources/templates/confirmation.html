@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Booking Confirmed')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body text-center p-5">
+                    <div id="loadingState">
+                        <div class="spinner-border text-primary mb-3"></div>
+                        <p>Loading booking details...</p>
+                    </div>
+                    <div id="confirmationContent" class="d-none">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                        </div>
+                        <h2 class="text-success mb-3">Booking Confirmed!</h2>
+                        <p class="text-muted mb-4">Your tickets have been booked successfully</p>
+
+                        <div class="card bg-light mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 text-start">
+                                        <p><strong>Booking Ref:</strong> <span id="bRef" class="text-primary fw-bold"></span></p>
+                                        <p><strong>Movie:</strong> <span id="bMovie"></span></p>
+                                        <p><strong>Theater:</strong> <span id="bTheater"></span></p>
+                                        <p><strong>Screen:</strong> <span id="bScreen"></span></p>
+                                    </div>
+                                    <div class="col-md-6 text-start">
+                                        <p><strong>Date & Time:</strong> <span id="bDatetime"></span></p>
+                                        <p><strong>Seats:</strong> <span id="bSeats"></span></p>
+                                        <p><strong>Amount Paid:</strong> <span id="bAmount" class="text-success fw-bold"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QR Code -->
+                        <div id="qrSection" class="mb-4">
+                            <h5>Your Entry QR Code</h5>
+                            <img id="qrCodeImg" class="qr-code border p-2 rounded" alt="QR Code">
+                            <p class="text-muted mt-2"><small>Show this QR code at the theater entrance</small></p>
+                        </div>
+
+                        <!-- Food Items -->
+                        <div id="foodSection" class="d-none mb-4">
+                            <h6>Food & Beverages Ordered</h6>
+                            <div id="foodList"></div>
+                        </div>
+
+                        <div class="d-flex gap-3 justify-content-center">
+                            <a href="/bookings" class="btn btn-primary"><i class="fas fa-list me-1"></i>My Bookings</a>
+                            <a href="/" class="btn btn-outline-secondary"><i class="fas fa-home me-1"></i>Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const bookingId = window.location.pathname.split('/').pop();
+const token = localStorage.getItem('accessToken');
+
+async function loadConfirmation() {
+    const res = await fetch(`/api/bookings/${bookingId}`, { headers: {'Authorization': 'Bearer ' + token }});
+    const data = await res.json();
+
+    if (data.success) {
+        const b = data.data;
+        document.getElementById('bRef').textContent = b.bookingReference;
+        document.getElementById('bMovie').textContent = b.movieTitle;
+        document.getElementById('bTheater').textContent = b.theaterName;
+        document.getElementById('bScreen').textContent = b.screenName;
+        document.getElementById('bDatetime').textContent = new Date(b.showDatetime).toLocaleString();
+        document.getElementById('bSeats').textContent = b.seatLabels.join(', ');
+        document.getElementById('bAmount').textContent = '₹' + b.totalAmount;
+
+        if (b.qrCodeUrl) {
+            document.getElementById('qrCodeImg').src = b.qrCodeUrl;
+        } else {
+            document.getElementById('qrSection').classList.add('d-none');
+        }
+
+        if (b.foodItems && b.foodItems.length > 0) {
+            document.getElementById('foodSection').classList.remove('d-none');
+            document.getElementById('foodList').innerHTML = b.foodItems.map(f =>
+                `<div class="d-flex justify-content-between"><span>${f.name} x${f.quantity}</span><span>₹${f.subtotal}</span></div>`
+            ).join('');
+        }
+
+        document.getElementById('loadingState').classList.add('d-none');
+        document.getElementById('confirmationContent').classList.remove('d-none');
+    }
+}
+
+loadConfirmation();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - My Profile')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                    <h4 id="userName"></h4>
+                    <p class="text-muted" id="userEmail"></p>
+                    <span class="badge bg-primary" id="userRole"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card shadow mb-3">
+                <div class="card-header"><h5 class="mb-0">Profile Details</h5></div>
+                <div class="card-body">
+                    <div class="row mb-2"><div class="col-4 fw-bold">Phone:</div><div class="col-8" id="userPhone"></div></div>
+                    <div class="row mb-2"><div class="col-4 fw-bold">Date of Birth:</div><div class="col-8" id="userDob"></div></div>
+                    <div class="row mb-2"><div class="col-4 fw-bold">Gender:</div><div class="col-8" id="userGender"></div></div>
+                    <div class="row mb-2"><div class="col-4 fw-bold">Member Since:</div><div class="col-8" id="userSince"></div></div>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Upcoming Bookings</h5>
+                    <a href="/bookings" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body" id="upcomingBookings">
+                    <div class="text-center"><div class="spinner-border spinner-border-sm"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const token = localStorage.getItem('accessToken');
+if (!token) { window.location.href = '/login'; }
+
+async function loadProfile() {
+    const res = await fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token }});
+    const data = await res.json();
+    if (data.success) {
+        const u = data.data;
+        document.getElementById('userName').textContent = u.firstName + ' ' + u.lastName;
+        document.getElementById('userEmail').textContent = u.email;
+        document.getElementById('userRole').textContent = u.role;
+        document.getElementById('userPhone').textContent = u.phone || '-';
+        document.getElementById('userDob').textContent = u.dateOfBirth ? new Date(u.dateOfBirth).toLocaleDateString() : '-';
+        document.getElementById('userGender').textContent = u.gender || '-';
+        document.getElementById('userSince').textContent = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-';
+    }
+}
+
+async function loadUpcoming() {
+    const res = await fetch('/api/bookings/my-bookings?page=0&size=5', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    const container = document.getElementById('upcomingBookings');
+
+    if (data.success && data.data.content.length > 0) {
+        container.innerHTML = data.data.content.filter(b => b.status === 'CONFIRMED').slice(0, 3).map(b => `
+            <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                <div>
+                    <strong>${b.movieTitle}</strong><br>
+                    <small class="text-muted">${b.theaterName} | ${new Date(b.showDatetime).toLocaleString()}</small>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-success">${b.status}</span><br>
+                    <small>${b.seatLabels.join(', ')}</small>
+                </div>
+            </div>
+        `).join('') || '<p class="text-muted">No upcoming bookings</p>';
+    } else {
+        container.innerHTML = '<p class="text-muted">No bookings found. <a href="/">Browse movies</a></p>';
+    }
+}
+
+loadProfile();
+loadUpcoming();
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-02-09T00:00:00.000Z" agent="draw.io" version="24.0.0" type="device">
+  <diagram id="use_case_diagram" name="Use Case Diagram">
+    <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==================== TITLE AND SUBTITLE ==================== -->
+
+        <mxCell id="title" value="Use Case Diagram &amp;mdash; Movie Ticket Booking System" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=22;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="550" y="12" width="1100" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="subtitle" value="Team: Shrish, Vaishnav, Saffiya, Rushad" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="800" y="48" width="600" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== SYSTEM BOUNDARY ==================== -->
+
+        <mxCell id="system_boundary" value="Movie Ticket Booking System" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;dashPattern=8 4;verticalAlign=top;fontSize=16;fontStyle=1;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="320" y="90" width="1560" height="1380" as="geometry" />
+        </mxCell>
+
+        <!-- Section separator: Customer / Manager -->
+        <mxCell id="sep_cust_mgr" value="" style="endArrow=none;html=1;strokeColor=#BBBBBB;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="605" as="sourcePoint" />
+            <mxPoint x="1860" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Section separator: Manager / Admin -->
+        <mxCell id="sep_mgr_admin" value="" style="endArrow=none;html=1;strokeColor=#BBBBBB;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="968" as="sourcePoint" />
+            <mxPoint x="1860" y="968" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Section label: Customer -->
+        <mxCell id="section_label_customer" value="Customer Use Cases" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=#dae8fc;fontSize=12;fontStyle=5;fontColor=#4472C4;rounded=1;spacingLeft=8;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="112" width="280" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Section label: Manager -->
+        <mxCell id="section_label_manager" value="Theater Manager Use Cases" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=#d5e8d4;fontSize=12;fontStyle=5;fontColor=#548235;rounded=1;spacingLeft=8;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="930" y="618" width="340" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Section label: Admin -->
+        <mxCell id="section_label_admin" value="Admin Use Cases" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=#fff2cc;fontSize=12;fontStyle=5;fontColor=#BF8F00;rounded=1;spacingLeft=8;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="980" y="980" width="240" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ACTORS ==================== -->
+
+        <!-- Primary Actors (Left Side) -->
+        <mxCell id="actor_customer" value="Customer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="120" y="280" width="40" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="actor_theater_manager" value="Theater Manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="95" y="725" width="40" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="actor_admin" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="140" y="1040" width="40" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Secondary Actors (Right Side) -->
+        <mxCell id="actor_payment_gateway" value="Payment Gateway" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="2030" y="340" width="40" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="actor_email_service" value="Email Service" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="2030" y="465" width="40" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== USE CASES: CUSTOMER (Blue) ==================== -->
+
+        <!-- Row 1 -->
+        <mxCell id="uc_register_account" value="Register Account" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="393" y="155" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_login" value="Login" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="705" y="155" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_browse_movies" value="Browse Movies" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1017" y="155" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_search_movies" value="Search Movies" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="155" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_view_movie_details" value="View Movie Details" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1642" y="155" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2 -->
+        <mxCell id="uc_view_showtimes" value="View Showtimes" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="393" y="310" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_select_seats" value="Select Seats" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="705" y="310" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_add_food" value="Add Food &amp;amp; Beverages" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1017" y="310" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_apply_promo" value="Apply Promo Code" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="310" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_make_payment" value="Make Payment" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1642" y="310" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Row 3 -->
+        <mxCell id="uc_view_booking_history" value="View Booking History" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="393" y="465" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_download_ticket" value="Download Ticket" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="705" y="465" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_cancel_booking" value="Cancel Booking" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1017" y="465" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_write_review" value="Write Review" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="465" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_receive_notifications" value="Receive Notifications" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1642" y="465" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== USE CASES: THEATER MANAGER (Green) ==================== -->
+
+        <!-- Row 1 -->
+        <mxCell id="uc_add_movie" value="Add Movie" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="393" y="665" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_edit_movie" value="Edit Movie" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="705" y="665" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_add_theater" value="Add Theater" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1017" y="665" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_configure_screen" value="Configure Screen" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="665" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_schedule_showtime" value="Schedule Showtime" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1642" y="665" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2 (4 items, centered) -->
+        <mxCell id="uc_set_dynamic_pricing" value="Set Dynamic Pricing" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="433" y="830" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_view_analytics" value="View Analytics" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="823" y="830" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_generate_reports" value="Generate Reports" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1213" y="830" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_food_menu" value="Manage Food Menu" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1603" y="830" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== USE CASES: ADMIN (Yellow) ==================== -->
+
+        <mxCell id="uc_manage_users" value="Manage Users" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="498" y="1060" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_promo_codes" value="Manage Promo Codes" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1018" y="1060" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_system_configuration" value="System Configuration" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1538" y="1060" width="165" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RELATIONSHIPS: INCLUDE ==================== -->
+
+        <!-- Select Seats =include=> View Showtimes -->
+        <mxCell id="rel_include_1" value="&lt;&lt;include&gt;&gt;" style="html=1;endArrow=open;endSize=12;dashed=1;strokeColor=#FF0000;fontColor=#FF0000;fontSize=10;fontStyle=2;labelBackgroundColor=#FFFFFF;" edge="1" source="uc_select_seats" target="uc_view_showtimes" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Make Payment =include=> Select Seats -->
+        <mxCell id="rel_include_2" value="&lt;&lt;include&gt;&gt;" style="html=1;endArrow=open;endSize=12;dashed=1;strokeColor=#FF0000;fontColor=#FF0000;fontSize=10;fontStyle=2;labelBackgroundColor=#FFFFFF;" edge="1" source="uc_make_payment" target="uc_select_seats" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Cancel Booking =include=> View Booking History -->
+        <mxCell id="rel_include_3" value="&lt;&lt;include&gt;&gt;" style="html=1;endArrow=open;endSize=12;dashed=1;strokeColor=#FF0000;fontColor=#FF0000;fontSize=10;fontStyle=2;labelBackgroundColor=#FFFFFF;" edge="1" source="uc_cancel_booking" target="uc_view_booking_history" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Download Ticket =include=> View Booking History -->
+        <mxCell id="rel_include_4" value="&lt;&lt;include&gt;&gt;" style="html=1;endArrow=open;endSize=12;dashed=1;strokeColor=#FF0000;fontColor=#FF0000;fontSize=10;fontStyle=2;labelBackgroundColor=#FFFFFF;" edge="1" source="uc_download_ticket" target="uc_view_booking_history" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RELATIONSHIPS: EXTEND ==================== -->
+
+        <!-- Add Food and Beverages =extend=> Select Seats -->
+        <mxCell id="rel_extend_1" value="&lt;&lt;extend&gt;&gt;" style="html=1;endArrow=open;endSize=12;dashed=1;strokeColor=#FF0000;fontColor=#FF0000;fontSize=10;fontStyle=2;labelBackgroundColor=#FFFFFF;" edge="1" source="uc_add_food" target="uc_select_seats" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Apply Promo Code =extend=> Make Payment -->
+        <mxCell id="rel_extend_2" value="&lt;&lt;extend&gt;&gt;" style="html=1;endArrow=open;endSize=12;dashed=1;strokeColor=#FF0000;fontColor=#FF0000;fontSize=10;fontStyle=2;labelBackgroundColor=#FFFFFF;" edge="1" source="uc_apply_promo" target="uc_make_payment" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Write Review =extend=> View Booking History -->
+        <mxCell id="rel_extend_3" value="&lt;&lt;extend&gt;&gt;" style="html=1;endArrow=open;endSize=12;dashed=1;strokeColor=#FF0000;fontColor=#FF0000;fontSize=10;fontStyle=2;labelBackgroundColor=#FFFFFF;" edge="1" source="uc_write_review" target="uc_view_booking_history" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RELATIONSHIPS: GENERALIZATION ==================== -->
+
+        <!-- Theater Manager =generalization=> Admin -->
+        <mxCell id="rel_gen_mgr_admin" value="" style="html=1;endArrow=block;endFill=0;endSize=14;strokeColor=#333333;edgeStyle=orthogonalEdgeStyle;strokeWidth=2;" edge="1" source="actor_theater_manager" target="actor_admin" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ASSOCIATIONS: CUSTOMER ==================== -->
+
+        <!-- Customer -> Register Account -->
+        <mxCell id="assoc_cust_01" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_register_account" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Login -->
+        <mxCell id="assoc_cust_02" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_login" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Browse Movies -->
+        <mxCell id="assoc_cust_03" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_browse_movies" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Search Movies -->
+        <mxCell id="assoc_cust_04" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_search_movies" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> View Movie Details -->
+        <mxCell id="assoc_cust_05" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_view_movie_details" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> View Showtimes -->
+        <mxCell id="assoc_cust_06" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_view_showtimes" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Select Seats -->
+        <mxCell id="assoc_cust_07" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_select_seats" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Add Food & Beverages -->
+        <mxCell id="assoc_cust_08" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_add_food" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Apply Promo Code -->
+        <mxCell id="assoc_cust_09" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_apply_promo" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Make Payment -->
+        <mxCell id="assoc_cust_10" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_make_payment" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> View Booking History -->
+        <mxCell id="assoc_cust_11" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_view_booking_history" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Download Ticket -->
+        <mxCell id="assoc_cust_12" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_download_ticket" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Cancel Booking -->
+        <mxCell id="assoc_cust_13" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_cancel_booking" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Write Review -->
+        <mxCell id="assoc_cust_14" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_write_review" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -> Receive Notifications -->
+        <mxCell id="assoc_cust_15" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_customer" target="uc_receive_notifications" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ASSOCIATIONS: THEATER MANAGER ==================== -->
+
+        <!-- Theater Manager -> Add Movie -->
+        <mxCell id="assoc_mgr_01" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_add_movie" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> Edit Movie -->
+        <mxCell id="assoc_mgr_02" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_edit_movie" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> Add Theater -->
+        <mxCell id="assoc_mgr_03" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_add_theater" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> Configure Screen -->
+        <mxCell id="assoc_mgr_04" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_configure_screen" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> Schedule Showtime -->
+        <mxCell id="assoc_mgr_05" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_schedule_showtime" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> Set Dynamic Pricing -->
+        <mxCell id="assoc_mgr_06" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_set_dynamic_pricing" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> View Analytics -->
+        <mxCell id="assoc_mgr_07" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_view_analytics" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> Generate Reports -->
+        <mxCell id="assoc_mgr_08" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_generate_reports" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Theater Manager -> Manage Food Menu -->
+        <mxCell id="assoc_mgr_09" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_theater_manager" target="uc_manage_food_menu" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ASSOCIATIONS: ADMIN ==================== -->
+
+        <!-- Admin -> Manage Users -->
+        <mxCell id="assoc_admin_01" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_admin" target="uc_manage_users" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Admin -> Manage Promo Codes -->
+        <mxCell id="assoc_admin_02" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_admin" target="uc_manage_promo_codes" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Admin -> System Configuration -->
+        <mxCell id="assoc_admin_03" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_admin" target="uc_system_configuration" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ASSOCIATIONS: PAYMENT GATEWAY ==================== -->
+
+        <!-- Payment Gateway -> Make Payment -->
+        <mxCell id="assoc_pg_01" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_payment_gateway" target="uc_make_payment" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Payment Gateway -> Cancel Booking -->
+        <mxCell id="assoc_pg_02" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_payment_gateway" target="uc_cancel_booking" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ASSOCIATIONS: EMAIL SERVICE ==================== -->
+
+        <!-- Email Service -> Receive Notifications -->
+        <mxCell id="assoc_es_01" value="" style="html=1;endArrow=none;strokeColor=#333333;" edge="1" source="actor_email_service" target="uc_receive_notifications" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

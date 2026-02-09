@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Admin Dashboard')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white"><h6 class="mb-0"><i class="fas fa-cog me-1"></i>Admin Panel</h6></div>
+                <div class="list-group list-group-flush">
+                    <a href="/admin" class="list-group-item list-group-item-action active"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/movies" class="list-group-item list-group-item-action"><i class="fas fa-film me-2"></i>Movies</a>
+                    <a href="/admin/theaters" class="list-group-item list-group-item-action"><i class="fas fa-building me-2"></i>Theaters</a>
+                    <a href="/admin/showtimes" class="list-group-item list-group-item-action"><i class="fas fa-calendar me-2"></i>Showtimes</a>
+                    <a href="/admin/users" class="list-group-item list-group-item-action"><i class="fas fa-users me-2"></i>Users</a>
+                    <a href="/admin/analytics" class="list-group-item list-group-item-action"><i class="fas fa-chart-bar me-2"></i>Analytics</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10">
+            <h3 class="mb-4"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h3>
+
+            <!-- Stats Cards -->
+            <div class="row g-3 mb-4" id="statsCards">
+                <div class="col-12 text-center"><div class="spinner-border text-primary"></div></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header"><h6 class="mb-0">Quick Actions</h6></div>
+                        <div class="card-body">
+                            <a href="/admin/movies" class="btn btn-primary me-2 mb-2"><i class="fas fa-plus me-1"></i>Add Movie</a>
+                            <a href="/admin/theaters" class="btn btn-success me-2 mb-2"><i class="fas fa-plus me-1"></i>Add Theater</a>
+                            <a href="/admin/showtimes" class="btn btn-info me-2 mb-2"><i class="fas fa-plus me-1"></i>Add Showtime</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header"><h6 class="mb-0">Active Promo Codes</h6></div>
+                        <div class="card-body" id="promoCodesList">
+                            <div class="text-center"><div class="spinner-border spinner-border-sm"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const token = localStorage.getItem('accessToken');
+if (!token) { window.location.href = '/login'; }
+
+async function loadDashboard() {
+    const res = await fetch('/api/admin/dashboard/stats', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (data.success) {
+        const s = data.data;
+        document.getElementById('statsCards').innerHTML = `
+            <div class="col-md-3"><div class="card bg-primary text-white"><div class="card-body">
+                <h6>Movies</h6><h3>${s.totalMovies}</h3><small>${s.nowShowingMovies} showing | ${s.upcomingMovies} upcoming</small>
+            </div></div></div>
+            <div class="col-md-3"><div class="card bg-success text-white"><div class="card-body">
+                <h6>Monthly Revenue</h6><h3>₹${s.monthlyRevenue}</h3><small>This month</small>
+            </div></div></div>
+            <div class="col-md-3"><div class="card bg-info text-white"><div class="card-body">
+                <h6>Total Bookings</h6><h3>${s.totalBookings}</h3><small>${s.todayShowtimes} shows today</small>
+            </div></div></div>
+            <div class="col-md-3"><div class="card bg-warning text-dark"><div class="card-body">
+                <h6>Infrastructure</h6><h3>${s.totalTheaters} Theaters</h3><small>${s.totalScreens} screens | ${s.totalUsers} users</small>
+            </div></div></div>
+        `;
+    }
+}
+
+async function loadPromoCodes() {
+    const res = await fetch('/api/admin/promo-codes', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (data.success && data.data.length > 0) {
+        document.getElementById('promoCodesList').innerHTML = data.data.map(pc => `
+            <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                <div><strong>${pc.code}</strong><br><small>${pc.discountType}: ${pc.discountValue}</small></div>
+                <div class="text-end"><span class="badge ${pc.isActive ? 'bg-success' : 'bg-secondary'}">${pc.isActive ? 'Active' : 'Inactive'}</span><br><small>${pc.currentUsage}/${pc.maxUsage} used</small></div>
+            </div>
+        `).join('');
+    } else {
+        document.getElementById('promoCodesList').innerHTML = '<p class="text-muted">No promo codes</p>';
+    }
+}
+
+loadDashboard();
+loadPromoCodes();
+</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<mxfile host="app.diagrams.net" modified="2026-02-09" agent="Claude" version="24.0.0" type="device">
+  <diagram id="d8_payment_lifecycle" name="State Diagram: Payment Lifecycle - Vaishnav">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ==================== TITLE ==================== -->
+        <mxCell id="d8_title" value="State Diagram: Payment Lifecycle - Vaishnav" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="497" y="10" width="660" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== INITIAL STATE ==================== -->
+        <mxCell id="d8_initial" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="775" y="55" width="30" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== COMPOSITE: IN PROGRESS ==================== -->
+        <mxCell id="d8_composite_inprogress" value="In Progress" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;dashPattern=8 4;verticalAlign=top;fontStyle=1;fontSize=14;spacingTop=5;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="590" y="95" width="750" height="350" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 1: INITIATED ==================== -->
+        <mxCell id="d8_state_initiated" value="Initiated" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="660" y="130" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_initiated_internal" value="entry / Create payment record&#xa;do / Await payment details" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_initiated">
+          <mxGeometry y="28" width="260" height="72" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 2: PROCESSING ==================== -->
+        <mxCell id="d8_state_processing" value="Processing" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="660" y="310" width="260" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_processing_internal" value="entry / Route through Payment Facade&#xa;do / Wait for gateway response (timeout: 2 min)&#xa;exit / Log transaction result" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_processing">
+          <mxGeometry y="28" width="260" height="82" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 3: AWAITING CONFIRMATION ==================== -->
+        <mxCell id="d8_state_awaiting" value="Awaiting Confirmation" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="310" width="260" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_awaiting_internal" value="entry / Display QR / redirect URL&#xa;do / Poll gateway every 5 seconds&#xa;exit / Clear polling timer" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_awaiting">
+          <mxGeometry y="28" width="260" height="82" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== COMPOSITE: COMPLETED ==================== -->
+        <mxCell id="d8_composite_completed" value="Completed" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;dashPattern=8 4;verticalAlign=top;fontStyle=1;fontSize=14;spacingTop=5;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="100" y="485" width="870" height="600" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 4: SUCCESS ==================== -->
+        <mxCell id="d8_state_success" value="Success" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="660" y="530" width="260" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_success_internal" value="entry / Update booking to CONFIRMED&#xa;entry / Generate QR code&#xa;entry / Send confirmation email&#xa;entry / Release seat locks" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_success">
+          <mxGeometry y="28" width="260" height="92" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 5: FAILED ==================== -->
+        <mxCell id="d8_state_failed" value="Failed" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="200" y="310" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_failed_internal" value="entry / Log error&#xa;entry / Show error message to user" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_failed">
+          <mxGeometry y="28" width="240" height="72" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 6: REFUND INITIATED ==================== -->
+        <mxCell id="d8_state_refund_init" value="Refund Initiated" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="200" y="540" width="260" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_refund_init_internal" value="entry / Calculate refund amount" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_refund_init">
+          <mxGeometry y="28" width="260" height="62" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 7: REFUND PROCESSING ==================== -->
+        <mxCell id="d8_state_refund_proc" value="Refund Processing" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#d7c4e8;strokeColor=#9673a6;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="200" y="720" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_refund_proc_internal" value="entry / Send refund to gateway&#xa;do / Monitor refund status" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_refund_proc">
+          <mxGeometry y="28" width="260" height="72" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== STATE 8: REFUNDED ==================== -->
+        <mxCell id="d8_state_refunded" value="Refunded" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#b8a8d0;strokeColor=#7d5fa6;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="200" y="910" width="240" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_state_refunded_internal" value="entry / Update payment record&#xa;entry / Send refund confirmation" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;fontColor=#333333;" vertex="1" parent="d8_state_refunded">
+          <mxGeometry y="28" width="240" height="62" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== FINAL STATES ==================== -->
+        <!-- Final state 1: bottom center for success path -->
+        <mxCell id="d8_final1" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="778" y="730" width="24" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_final1_ring" value="" style="ellipse;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="773" y="725" width="34" height="34" as="geometry"/>
+        </mxCell>
+
+        <!-- Final state 2: for failed abandon path -->
+        <mxCell id="d8_final2" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="108" y="398" width="24" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_final2_ring" value="" style="ellipse;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="103" y="393" width="34" height="34" as="geometry"/>
+        </mxCell>
+
+        <!-- Final state 3: for refunded path -->
+        <mxCell id="d8_final3" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="308" y="1060" width="24" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_final3_ring" value="" style="ellipse;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="303" y="1055" width="34" height="34" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== TRANSITIONS ==================== -->
+
+        <!-- T1: Initial → Initiated -->
+        <mxCell id="d8_trans_1" value="User clicks 'Pay Now' /&#xa;Create payment record" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_initial" target="d8_state_initiated" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T2: Initiated → Processing -->
+        <mxCell id="d8_trans_2" value="Payment details submitted /&#xa;Send to Payment Facade" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_initiated" target="d8_state_processing" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T3: Processing → Success -->
+        <mxCell id="d8_trans_3" value="Gateway returns success" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_processing" target="d8_state_success" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T4: Processing → Failed -->
+        <mxCell id="d8_trans_4" value="Gateway returns failure /&#xa;Log error" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_processing" target="d8_state_failed" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T5: Processing → Awaiting Confirmation -->
+        <mxCell id="d8_trans_5" value="[UPI or Net Banking] /&#xa;Display QR code" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_processing" target="d8_state_awaiting" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T6: Awaiting Confirmation → Success -->
+        <mxCell id="d8_trans_6" value="User completes payment /&#xa;Verify with gateway" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_awaiting" target="d8_state_success" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1180" y="470"/>
+              <mxPoint x="1180" y="560"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T7: Awaiting Confirmation → Failed -->
+        <mxCell id="d8_trans_7" value="Timeout (15 min) or&#xa;user cancels" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_awaiting" target="d8_state_failed" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1180" y="280"/>
+              <mxPoint x="320" y="280"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T8: Awaiting Confirmation → self-loop -->
+        <mxCell id="d8_trans_8" value="Poll every&#xa;5 seconds" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;strokeWidth=1.5;strokeColor=#333333;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" source="d8_state_awaiting" target="d8_state_awaiting" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1350" y="338"/>
+              <mxPoint x="1350" y="393"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T9: Failed → Initiated (retry) -->
+        <mxCell id="d8_trans_9" value="[retry count &lt; 3]&#xa;User clicks 'Retry' /&#xa;Create new attempt" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_failed" target="d8_state_initiated" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="180"/>
+              <mxPoint x="660" y="180"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T10: Failed → Final2 -->
+        <mxCell id="d8_trans_10" value="User abandons&#xa;payment" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_failed" target="d8_final2_ring" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T11: Success → Refund Initiated -->
+        <mxCell id="d8_trans_11" value="[refund policy allows]&#xa;User cancels booking /&#xa;Calculate refund" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_success" target="d8_state_refund_init" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T12: Success → Final1 -->
+        <mxCell id="d8_trans_12" value="Booking completed" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_success" target="d8_final1_ring" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T13: Refund Initiated → Refund Processing -->
+        <mxCell id="d8_trans_13" value="Send refund request&#xa;to gateway" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_refund_init" target="d8_state_refund_proc" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T14: Refund Processing → Refunded -->
+        <mxCell id="d8_trans_14" value="Gateway confirms refund" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_refund_proc" target="d8_state_refunded" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- T15: Refund Processing → Failed -->
+        <mxCell id="d8_trans_15" value="Refund failed /&#xa;Notify support" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_refund_proc" target="d8_state_failed" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="140" y="770"/>
+              <mxPoint x="140" y="410"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- T16: Refunded → Final3 -->
+        <mxCell id="d8_trans_16" value="Archive payment record" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=10;fontStyle=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=1.5;strokeColor=#333333;" edge="1" source="d8_state_refunded" target="d8_final3_ring" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== NOTES ==================== -->
+        <mxCell id="d8_note1" value="Facade Pattern routes to:&#xa;- CardPaymentGateway&#xa;- UPIPaymentGateway&#xa;- NetBankingGateway&#xa;- WalletGateway" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=10;shadow=1;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="530" width="200" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="d8_note2" value="Async flow for UPI/Net Banking&#xa;uses polling mechanism.&#xa;WebSocket fallback available&#xa;for real-time confirmation." style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=10;shadow=1;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="140" width="210" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="d8_note3" value="Strategy Pattern:&#xa;Each gateway implements&#xa;PaymentStrategy interface&#xa;with process() and refund()" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=10;shadow=1;align=left;spacingLeft=6;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="680" width="210" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Note connectors -->
+        <mxCell id="d8_note1_conn" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;dashed=1;strokeColor=#d6b656;strokeWidth=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="d8_note1" target="d8_state_success" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="d8_note2_conn" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;dashed=1;strokeColor=#d6b656;strokeWidth=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" source="d8_note2" target="d8_state_initiated" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== LEGEND ==================== -->
+        <mxCell id="d8_legend_box" value="Payment Methods" style="rounded=1;whiteSpace=wrap;html=1;arcSize=10;fillColor=#f5f5f5;strokeColor=#999999;verticalAlign=top;fontStyle=1;fontSize=11;spacingTop=5;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="810" width="200" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="d8_legend_text" value="Credit Card (direct)&#xa;Debit Card (direct)&#xa;UPI (async - polling)&#xa;Net Banking (async - redirect)&#xa;Wallet (direct)" style="text;html=1;align=left;verticalAlign=top;spacingLeft=6;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="840" width="180" height="80" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

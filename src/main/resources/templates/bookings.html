@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - My Bookings')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container py-4">
+    <h2 class="mb-4"><i class="fas fa-ticket-alt me-2"></i>My Bookings</h2>
+
+    <div id="bookingsList">
+        <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const token = localStorage.getItem('accessToken');
+if (!token) { window.location.href = '/login'; }
+
+async function loadBookings() {
+    const res = await fetch('/api/bookings/my-bookings?page=0&size=20', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+
+    if (data.success) {
+        const bookings = data.data.content;
+        if (bookings.length === 0) {
+            document.getElementById('bookingsList').innerHTML = '<div class="text-center py-5"><p class="text-muted">No bookings yet. <a href="/">Browse movies</a></p></div>';
+            return;
+        }
+
+        document.getElementById('bookingsList').innerHTML = bookings.map(b => {
+            const statusColor = { CONFIRMED: 'success', PENDING: 'warning', LOCKED: 'info', CANCELLED: 'danger', REFUNDED: 'secondary' }[b.status] || 'dark';
+            return `
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <h6 class="mb-1">${b.movieTitle}</h6>
+                            <small class="text-muted">${b.bookingReference}</small>
+                        </div>
+                        <div class="col-md-3">
+                            <small><i class="fas fa-map-marker-alt me-1"></i>${b.theaterName}</small><br>
+                            <small><i class="fas fa-calendar me-1"></i>${new Date(b.showDatetime).toLocaleString()}</small>
+                        </div>
+                        <div class="col-md-2">
+                            <small><i class="fas fa-chair me-1"></i>${b.seatLabels.join(', ')}</small>
+                        </div>
+                        <div class="col-md-2">
+                            <span class="badge bg-${statusColor}">${b.status}</span><br>
+                            <strong class="text-success">₹${b.totalAmount}</strong>
+                        </div>
+                        <div class="col-md-2 text-end">
+                            ${b.status === 'CONFIRMED' ? `<a href="/booking/confirmation/${b.id}" class="btn btn-sm btn-outline-primary me-1">View</a><button class="btn btn-sm btn-outline-danger" onclick="cancelBooking(${b.id})">Cancel</button>` : ''}
+                            ${b.status === 'LOCKED' ? `<a href="/payment/${b.id}" class="btn btn-sm btn-success">Pay Now</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+}
+
+async function cancelBooking(id) {
+    if (!confirm('Are you sure you want to cancel this booking?')) return;
+    const res = await fetch(`/api/bookings/${id}/cancel?reason=User+cancelled`, {
+        method: 'POST', headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const data = await res.json();
+    if (data.success) {
+        alert('Booking cancelled. Refund will be processed.');
+        loadBookings();
+    } else {
+        alert(data.message);
+    }
+}
+
+loadBookings();
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<mxfile host="app.diagrams.net" modified="2026-02-09" agent="Claude" version="24.0.0" type="device">
+  <diagram id="state-saffiya" name="State Diagram - Movie Lifecycle (Saffiya)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="State Diagram: Movie Lifecycle — Saffiya" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="450" y="15" width="450" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- Initial -->
+        <mxCell id="start" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="80" y="385" width="30" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Announced -->
+        <mxCell id="s_announced" value="Announced" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="170" y="340" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_announced_i" value="entry / Set status to ANNOUNCED&#xa;do / Allow manager to edit details" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_announced">
+          <mxGeometry y="28" width="240" height="92" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Upcoming -->
+        <mxCell id="s_upcoming" value="Upcoming" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="510" y="310" width="260" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_upcoming_i" value="entry / Set status to UPCOMING&#xa;entry / Enable trailer playback&#xa;entry / Show on homepage carousel&#xa;do / Accept showtime scheduling&#xa;exit / Notify saved-movie users" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_upcoming">
+          <mxGeometry y="28" width="260" height="122" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Now Showing -->
+        <mxCell id="s_showing" value="Now Showing" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="870" y="280" width="270" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_showing_i" value="entry / Set status to NOW_SHOWING&#xa;entry / Enable ticket booking&#xa;entry / Start collecting reviews&#xa;do / Monitor showtime bookings&#xa;do / Update popularity metrics" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_showing">
+          <mxGeometry y="28" width="270" height="142" as="geometry"/>
+        </mxCell>
+
+        <!-- Self-loop on Now Showing -->
+        <mxCell id="s_showing_self" value="Manager schedules&#xa;new showtimes" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;fontSize=9;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1">
+          <mxGeometry x="-0.2" y="20" relative="1" as="geometry">
+            <mxPoint x="1140" y="323" as="sourcePoint"/>
+            <mxPoint x="1140" y="405" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="1190" y="323"/>
+              <mxPoint x="1190" y="405"/>
+            </Array>
+            <mxPoint as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- State: Ending Soon -->
+        <mxCell id="s_ending" value="Ending Soon" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="890" y="560" width="240" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_ending_i" value="entry / Add 'Last Chance' badge&#xa;do / Monitor remaining shows" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_ending">
+          <mxGeometry y="28" width="240" height="62" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Ended -->
+        <mxCell id="s_ended" value="Ended" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="530" y="560" width="260" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_ended_i" value="entry / Set status to ENDED&#xa;entry / Disable new bookings&#xa;do / Keep searchable for 90 days&#xa;do / Maintain review history" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_ended">
+          <mxGeometry y="28" width="260" height="92" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Archived -->
+        <mxCell id="s_archived" value="Archived" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#999999;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="200" y="580" width="220" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_archived_i" value="entry / Remove from active catalog&#xa;entry / Move to cold storage" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_archived">
+          <mxGeometry y="28" width="220" height="52" as="geometry"/>
+        </mxCell>
+
+        <!-- Final -->
+        <mxCell id="end_inner" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="95" y="611" width="18" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="end_outer" value="" style="ellipse;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="90" y="606" width="28" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== TRANSITIONS ==================== -->
+        <!-- Initial -> Announced -->
+        <mxCell id="t1" value="Manager adds movie" style="html=1;rounded=1;fontSize=9;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="start" target="s_announced" parent="1"/>
+
+        <!-- Announced -> Upcoming -->
+        <mxCell id="t2" value="[release date within 30 days]&#xa;/ Display in 'Coming Soon'" style="html=1;rounded=1;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="s_announced" target="s_upcoming" parent="1"/>
+
+        <!-- Announced -> Archived -->
+        <mxCell id="t3" value="Movie cancelled" style="html=1;rounded=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#b85450;fontColor=#b85450;" edge="1" source="s_announced" target="s_archived" parent="1"/>
+
+        <!-- Upcoming -> Now Showing -->
+        <mxCell id="t4" value="[release date reached]&#xa;/ Make showtimes bookable" style="html=1;rounded=1;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="s_upcoming" target="s_showing" parent="1"/>
+
+        <!-- Upcoming -> Archived -->
+        <mxCell id="t5" value="Release cancelled&#xa;/ Cancel all showtimes" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;strokeColor=#b85450;fontColor=#b85450;" edge="1" source="s_upcoming" target="s_archived" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="500" y="530"/><mxPoint x="420" y="530"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Now Showing -> Ending Soon -->
+        <mxCell id="t6" value="[30 days since release OR&#xa;last showtime within 7 days]&#xa;/ Add 'Last Chance' badge" style="html=1;rounded=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="s_showing" target="s_ending" parent="1"/>
+
+        <!-- Ending Soon -> Ended -->
+        <mxCell id="t7" value="Last showtime completed&#xa;/ Remove from 'Now Showing'" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="s_ending" target="s_ended" parent="1"/>
+
+        <!-- Ending Soon -> Now Showing (back) -->
+        <mxCell id="t8" value="New showtimes added&#xa;/ Remove badge" style="html=1;rounded=1;fontSize=9;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;fontColor=#82b366;curved=1;" edge="1" source="s_ending" target="s_showing" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1200" y="520"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Ended -> Archived -->
+        <mxCell id="t9" value="[90 days after last showtime]&#xa;/ Remove from catalog" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="s_ended" target="s_archived" parent="1"/>
+
+        <!-- Ended -> Now Showing (re-release) -->
+        <mxCell id="t10" value="Re-release scheduled&#xa;/ Restore to catalog" style="html=1;rounded=1;fontSize=9;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;fontColor=#82b366;curved=1;" edge="1" source="s_ended" target="s_showing" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="660" y="510"/><mxPoint x="1005" y="510"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Archived -> Final -->
+        <mxCell id="t11" value="Move to cold storage" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" source="s_archived" target="end_outer" parent="1"/>
+
+        <!-- Notes -->
+        <mxCell id="note1" value="Automatic transitions based&#xa;on dates (scheduled tasks)" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="870" y="780" width="180" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="note2" value="Manager can manually&#xa;override some transitions" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="780" width="170" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="note3" value="NOW_SHOWING is the&#xa;primary revenue state" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="310" width="160" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="nc3" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" source="note3" target="s_showing" parent="1"/>
+
+        <!-- Legend -->
+        <mxCell id="leg_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f9f9f9;strokeColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="60" y="780" width="280" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_title" value="Legend" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="785" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="812" width="20" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1" value="Announced" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="105" y="808" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="200" y="812" width="20" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2" value="Upcoming" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="225" y="808" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="835" width="20" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3" value="Now Showing" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="105" y="831" width="90" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg4c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="200" y="835" width="20" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg4" value="Ending Soon" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="225" y="831" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg5c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="80" y="858" width="20" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg5" value="Ended" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="105" y="854" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg6c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="200" y="858" width="20" height="14" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg6" value="Archived" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="225" y="854" width="80" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg7" value="── Green arrow = recovery transition" style="text;html=1;align=left;fontSize=9;strokeColor=none;fillColor=none;fontColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="877" width="240" height="18" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

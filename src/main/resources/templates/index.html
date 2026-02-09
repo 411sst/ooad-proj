@@ -66,29 +66,25 @@
     </div>
 </section>
 
-<!-- Now Showing Placeholder -->
+<!-- Now Showing -->
 <section class="py-4">
     <div class="container">
-        <h2 class="mb-4"><i class="fas fa-fire text-danger me-2"></i>Now Showing</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-fire text-danger me-2"></i>Now Showing</h2>
+            <a href="/movies" class="btn btn-outline-primary">View All</a>
+        </div>
         <div class="row g-4" id="nowShowingMovies">
-            <div class="col-12 text-center py-5">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="text-muted mt-3">Movies will be loaded here in Section 2...</p>
-            </div>
+            <div class="col-12 text-center py-5"><div class="spinner-border text-primary"></div></div>
         </div>
     </div>
 </section>
 
-<!-- Coming Soon Placeholder -->
+<!-- Coming Soon -->
 <section class="py-4 bg-white">
     <div class="container">
         <h2 class="mb-4"><i class="fas fa-clock text-warning me-2"></i>Coming Soon</h2>
         <div class="row g-4" id="comingSoonMovies">
-            <div class="col-12 text-center py-5">
-                <p class="text-muted">Upcoming movies will appear here...</p>
-            </div>
+            <div class="col-12 text-center py-5"><div class="spinner-border text-primary"></div></div>
         </div>
     </div>
 </section>
@@ -105,6 +101,59 @@ function searchMovies() {
 document.getElementById('searchInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') searchMovies();
 });
+
+function renderMovieCard(movie) {
+    const rating = movie.imdbRating ? `<span class="badge bg-warning text-dark"><i class="fas fa-star"></i> ${movie.imdbRating}</span>` : '';
+    const userRating = movie.avgUserRating ? `<span class="badge bg-info"><i class="fas fa-users"></i> ${movie.avgUserRating.toFixed(1)}</span>` : '';
+    return `
+    <div class="col-md-3 col-sm-6">
+        <div class="card movie-card h-100 shadow-sm border-0" onclick="window.location='/movies/${movie.id}'" style="cursor:pointer">
+            <div class="card-img-top bg-dark text-white d-flex align-items-center justify-content-center" style="height: 280px;">
+                ${movie.posterUrl ? `<img src="${movie.posterUrl}" alt="${movie.title}" class="img-fluid h-100 w-100" style="object-fit:cover">` : `<div class="text-center p-3"><i class="fas fa-film fa-3x mb-2"></i><br>${movie.title}</div>`}
+            </div>
+            <div class="card-body">
+                <h6 class="card-title mb-1">${movie.title}</h6>
+                <small class="text-muted">${movie.genre} | ${movie.language} | ${movie.duration}min</small>
+                <div class="mt-2">
+                    ${rating} ${userRating}
+                    <span class="badge bg-secondary">${movie.certification}</span>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+async function loadMovies() {
+    try {
+        const [nowRes, upRes] = await Promise.all([
+            fetch('/api/movies/browse/now-showing'),
+            fetch('/api/movies/browse/upcoming')
+        ]);
+        const nowData = await nowRes.json();
+        const upData = await upRes.json();
+
+        if (nowData.success && nowData.data.length > 0) {
+            document.getElementById('nowShowingMovies').innerHTML =
+                nowData.data.map(renderMovieCard).join('');
+        } else {
+            document.getElementById('nowShowingMovies').innerHTML =
+                '<div class="col-12 text-center py-5"><p class="text-muted">No movies currently showing</p></div>';
+        }
+
+        if (upData.success && upData.data.length > 0) {
+            document.getElementById('comingSoonMovies').innerHTML =
+                upData.data.map(renderMovieCard).join('');
+        } else {
+            document.getElementById('comingSoonMovies').innerHTML =
+                '<div class="col-12 text-center py-5"><p class="text-muted">No upcoming movies</p></div>';
+        }
+    } catch(e) {
+        document.getElementById('nowShowingMovies').innerHTML =
+            '<div class="col-12 text-center py-5"><p class="text-danger">Failed to load movies</p></div>';
+    }
+}
+
+loadMovies();
 </script>
 </body>
 </html>
