@@ -1,0 +1,57 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+.factorypath
+bin/
+out/
+.nb-gradle/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Spring Boot
+*.log
+logs/
+
+# Environment
+.env
+*.env.local
+
+# H2 Database files
+*.db
+*.mv.db
+*.trace.db
+
+# Build
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Compiled
+*.class
+*.jar
+*.war
+*.ear
+
+# Package Files
+*.tar.gz
+*.rar
+*.zip
+
+# QR Code generated files
+qrcodes/
