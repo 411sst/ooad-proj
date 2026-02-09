@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Movie Details')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container py-4">
+    <div id="loadingState" class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+
+    <div id="movieContent" class="d-none">
+        <!-- Movie Header -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <div id="posterContainer" class="bg-dark text-white rounded d-flex align-items-center justify-content-center" style="height: 350px;"></div>
+                    </div>
+                    <div class="col-md-9">
+                        <h2 id="movieTitle" class="mb-2"></h2>
+                        <div id="movieMeta" class="mb-3"></div>
+                        <div id="movieRatings" class="mb-3"></div>
+                        <p id="movieDesc" class="text-muted"></p>
+                        <div id="movieCast" class="mb-3"></div>
+                        <div id="movieCrewInfo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Showtimes -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Showtimes</h5>
+            </div>
+            <div class="card-body">
+                <!-- Date Selector -->
+                <div class="d-flex gap-2 mb-4 flex-wrap" id="dateTabs"></div>
+                <div id="showtimesList">
+                    <p class="text-muted text-center">Select a date to see available showtimes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-star me-2"></i>Reviews</h5>
+                <button class="btn btn-sm btn-warning" onclick="toggleReviewForm()" id="writeReviewBtn">Write Review</button>
+            </div>
+            <div class="card-body">
+                <!-- Review Form -->
+                <div id="reviewForm" class="d-none mb-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6>Your Review</h6>
+                            <div class="mb-2">
+                                <label class="form-label">Rating</label>
+                                <div id="starRating" class="mb-2">
+                                    <i class="fas fa-star fa-lg text-muted star-btn" data-rating="1" onclick="setRating(1)"></i>
+                                    <i class="fas fa-star fa-lg text-muted star-btn" data-rating="2" onclick="setRating(2)"></i>
+                                    <i class="fas fa-star fa-lg text-muted star-btn" data-rating="3" onclick="setRating(3)"></i>
+                                    <i class="fas fa-star fa-lg text-muted star-btn" data-rating="4" onclick="setRating(4)"></i>
+                                    <i class="fas fa-star fa-lg text-muted star-btn" data-rating="5" onclick="setRating(5)"></i>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <textarea class="form-control" id="reviewText" rows="3" placeholder="Share your thoughts..."></textarea>
+                            </div>
+                            <button class="btn btn-primary btn-sm" onclick="submitReview()">Submit Review</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="reviewsList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const movieId = window.location.pathname.split('/').pop();
+const token = localStorage.getItem('accessToken');
+let selectedRating = 0;
+let movieData = null;
+
+async function loadMovie() {
+    const res = await fetch(`/api/movies/browse/${movieId}`);
+    const data = await res.json();
+    if (data.success) {
+        movieData = data.data;
+        renderMovie(movieData);
+        loadShowtimes();
+        loadReviews();
+        document.getElementById('loadingState').classList.add('d-none');
+        document.getElementById('movieContent').classList.remove('d-none');
+    }
+}
+
+function renderMovie(m) {
+    document.title = 'MovieBook - ' + m.title;
+
+    const poster = document.getElementById('posterContainer');
+    if (m.posterUrl) {
+        poster.innerHTML = `<img src="${m.posterUrl}" alt="${m.title}" class="img-fluid rounded h-100 w-100" style="object-fit:cover">`;
+    } else {
+        poster.innerHTML = `<div class="text-center"><i class="fas fa-film fa-4x mb-2"></i><br>${m.title}</div>`;
+    }
+
+    document.getElementById('movieTitle').textContent = m.title;
+    document.getElementById('movieMeta').innerHTML = `
+        <span class="badge bg-primary me-1">${m.genre}</span>
+        <span class="badge bg-info me-1">${m.language}</span>
+        <span class="badge bg-secondary me-1">${m.certification}</span>
+        <span class="badge bg-dark me-1"><i class="fas fa-clock me-1"></i>${m.duration} min</span>
+        <span class="badge ${m.status === 'NOW_SHOWING' ? 'bg-success' : 'bg-warning'}">${m.status === 'NOW_SHOWING' ? 'Now Showing' : 'Coming Soon'}</span>
+    `;
+
+    const imdb = m.imdbRating ? `<span class="badge bg-warning text-dark fs-6 me-2"><i class="fas fa-star me-1"></i>IMDb ${m.imdbRating}</span>` : '';
+    const user = m.avgUserRating ? `<span class="badge bg-info fs-6 me-2"><i class="fas fa-users me-1"></i>Users ${m.avgUserRating.toFixed(1)}/5 (${m.reviewCount} reviews)</span>` : '<span class="text-muted">No reviews yet</span>';
+    document.getElementById('movieRatings').innerHTML = imdb + user;
+
+    document.getElementById('movieDesc').textContent = m.synopsis || m.description || '';
+
+    if (m.cast && m.cast.length > 0) {
+        document.getElementById('movieCast').innerHTML = '<strong>Cast: </strong>' +
+            m.cast.filter(c => c.roleName === 'ACTOR').map(c =>
+                `<span class="badge bg-light text-dark border me-1">${c.personName}${c.characterName ? ' as ' + c.characterName : ''}</span>`
+            ).join('');
+    }
+
+    const crew = [];
+    if (m.director) crew.push(`<strong>Director:</strong> ${m.director}`);
+    if (m.producer) crew.push(`<strong>Producer:</strong> ${m.producer}`);
+    if (m.releaseDate) crew.push(`<strong>Release Date:</strong> ${new Date(m.releaseDate).toLocaleDateString()}`);
+    document.getElementById('movieCrewInfo').innerHTML = crew.join(' | ');
+}
+
+function loadShowtimes() {
+    const dateTabs = document.getElementById('dateTabs');
+    const today = new Date();
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        const dateStr = date.toISOString().split('T')[0];
+        const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : date.toLocaleDateString('en', {weekday:'short', month:'short', day:'numeric'});
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-outline-primary' + (i === 0 ? ' active' : '');
+        btn.textContent = label;
+        btn.onclick = () => {
+            dateTabs.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            fetchShowtimes(dateStr);
+        };
+        dateTabs.appendChild(btn);
+    }
+    fetchShowtimes(today.toISOString().split('T')[0]);
+}
+
+async function fetchShowtimes(date) {
+    const res = await fetch(`/api/showtimes/movie/${movieId}/date/${date}`);
+    const data = await res.json();
+    const container = document.getElementById('showtimesList');
+
+    if (data.success && data.data.length > 0) {
+        // Group by theater
+        const byTheater = {};
+        data.data.forEach(s => {
+            const key = s.theaterName + ' (' + s.theaterType + ')';
+            if (!byTheater[key]) byTheater[key] = [];
+            byTheater[key].push(s);
+        });
+
+        container.innerHTML = Object.entries(byTheater).map(([theater, shows]) => `
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6 class="mb-2"><i class="fas fa-map-marker-alt me-1"></i>${theater}</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        ${shows.map(s => {
+                            const time = new Date('2000-01-01T' + s.showTime).toLocaleTimeString('en', {hour:'2-digit', minute:'2-digit'});
+                            const avail = s.availableSeats;
+                            const color = avail > 50 ? 'success' : avail > 20 ? 'warning' : avail > 0 ? 'danger' : 'secondary';
+                            return `<a href="/seats/${s.id}" class="btn btn-outline-${color} ${avail === 0 ? 'disabled' : ''}">
+                                ${time}<br><small>${s.screenName} | ${avail} seats | ₹${s.basePrice}</small>
+                            </a>`;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        container.innerHTML = '<p class="text-muted text-center">No showtimes available for this date</p>';
+    }
+}
+
+async function loadReviews() {
+    const res = await fetch(`/api/reviews/movie/${movieId}`);
+    const data = await res.json();
+    const container = document.getElementById('reviewsList');
+
+    if (data.success && data.data.length > 0) {
+        container.innerHTML = data.data.map(r => `
+            <div class="border-bottom pb-3 mb-3">
+                <div class="d-flex justify-content-between">
+                    <strong>${r.userName}</strong>
+                    <small class="text-muted">${new Date(r.createdAt).toLocaleDateString()}</small>
+                </div>
+                <div class="mb-1">${'<i class="fas fa-star text-warning"></i>'.repeat(r.rating)}${'<i class="fas fa-star text-muted"></i>'.repeat(5-r.rating)}</div>
+                <p class="mb-0 text-muted">${r.reviewText || ''}</p>
+            </div>
+        `).join('');
+    } else {
+        container.innerHTML = '<p class="text-muted text-center">No reviews yet. Be the first to review!</p>';
+    }
+}
+
+function toggleReviewForm() {
+    if (!token) { window.location.href = '/login'; return; }
+    document.getElementById('reviewForm').classList.toggle('d-none');
+}
+
+function setRating(r) {
+    selectedRating = r;
+    document.querySelectorAll('.star-btn').forEach(star => {
+        star.classList.toggle('text-warning', parseInt(star.dataset.rating) <= r);
+        star.classList.toggle('text-muted', parseInt(star.dataset.rating) > r);
+    });
+}
+
+async function submitReview() {
+    if (!selectedRating) { alert('Please select a rating'); return; }
+    const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ movieId: parseInt(movieId), rating: selectedRating, reviewText: document.getElementById('reviewText').value })
+    });
+    const data = await res.json();
+    if (data.success) {
+        document.getElementById('reviewForm').classList.add('d-none');
+        loadReviews();
+        loadMovie(); // Refresh rating
+    } else {
+        alert(data.message);
+    }
+}
+
+loadMovie();
+</script>
+</body>
+</html>

@@ -4,6 +4,9 @@ import com.moviebooking.entity.*;
 import com.moviebooking.entity.enums.BookingStatus;
 import com.moviebooking.exception.BadRequestException;
 import com.moviebooking.exception.ResourceNotFoundException;
+import com.moviebooking.patterns.chain.BookingValidationChain;
+import com.moviebooking.patterns.chain.BookingValidationRequest;
+import com.moviebooking.patterns.chain.ValidationResult;
 import com.moviebooking.patterns.state.BookingContext;
 import com.moviebooking.repository.*;
 import org.slf4j.Logger;
@@ -30,23 +33,47 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final BookingSeatRepository bookingSeatRepository;
     private final SeatRepository seatRepository;
+    private final SeatLockRepository seatLockRepository;
     private final ShowtimeRepository showtimeRepository;
     private final SeatService seatService;
+    private final BookingValidationChain validationChain;
 
     public BookingService(BookingRepository bookingRepository, BookingSeatRepository bookingSeatRepository,
-                         SeatRepository seatRepository, ShowtimeRepository showtimeRepository,
-                         SeatService seatService) {
+                         SeatRepository seatRepository, SeatLockRepository seatLockRepository,
+                         ShowtimeRepository showtimeRepository,
+                         SeatService seatService, BookingValidationChain validationChain) {
         this.bookingRepository = bookingRepository;
         this.bookingSeatRepository = bookingSeatRepository;
         this.seatRepository = seatRepository;
+        this.seatLockRepository = seatLockRepository;
         this.showtimeRepository = showtimeRepository;
         this.seatService = seatService;
+        this.validationChain = validationChain;
     }
 
     @Transactional
     public Booking createBooking(User user, Long showtimeId, List<Long> seatIds) {
         Showtime showtime = showtimeRepository.findById(showtimeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Showtime", "id", showtimeId));
+
+        // Chain of Responsibility: validate booking request
+        List<Long> bookedSeatIds = bookingSeatRepository.findBookedSeatIdsForShowtime(showtimeId);
+        List<Long> lockedSeatIds = seatLockRepository.findLockedSeatIdsForShowtime(showtimeId, LocalDateTime.now());
+        long activeBookings = bookingRepository.countActiveBookingsForShowtime(showtimeId);
+
+        BookingValidationRequest validationRequest = BookingValidationRequest.builder()
+                .user(user)
+                .showtime(showtime)
+                .seatIds(seatIds)
+                .bookedSeatIds(bookedSeatIds)
+                .lockedSeatIds(lockedSeatIds)
+                .activeBookingsCount(activeBookings)
+                .build();
+
+        ValidationResult validationResult = validationChain.validate(validationRequest);
+        if (!validationResult.isValid()) {
+            throw new BadRequestException(validationResult.getMessage());
+        }
 
         List<Seat> seats = seatRepository.findByIdIn(seatIds);
         if (seats.size() != seatIds.size()) {

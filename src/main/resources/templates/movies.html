@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Browse Movies')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container py-4">
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white"><h6 class="mb-0"><i class="fas fa-filter me-1"></i>Filters</h6></div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Search</label>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Movie, actor, genre...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Genre</label>
+                        <select class="form-select" id="genreFilter">
+                            <option value="">All Genres</option>
+                            <option>Action</option><option>Comedy</option><option>Drama</option>
+                            <option>Thriller</option><option>Horror</option><option>Romance</option>
+                            <option>Sci-Fi</option><option>Animation</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Language</label>
+                        <select class="form-select" id="langFilter">
+                            <option value="">All Languages</option>
+                            <option>English</option><option>Hindi</option><option>Kannada</option>
+                            <option>Tamil</option><option>Telugu</option><option>Malayalam</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        <select class="form-select" id="statusFilter">
+                            <option value="">All</option>
+                            <option value="now-showing">Now Showing</option>
+                            <option value="upcoming">Coming Soon</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100" onclick="applyFilters()">
+                        <i class="fas fa-search me-1"></i>Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie Grid -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 id="resultsTitle">All Movies</h4>
+                <span id="resultCount" class="text-muted"></span>
+            </div>
+            <div class="row g-4" id="movieGrid">
+                <div class="col-12 text-center py-5"><div class="spinner-border text-primary"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+let allMovies = [];
+
+function renderMovieCard(movie) {
+    const rating = movie.imdbRating ? `<span class="badge bg-warning text-dark"><i class="fas fa-star"></i> ${movie.imdbRating}</span>` : '';
+    const statusBadge = movie.status === 'NOW_SHOWING' ?
+        '<span class="badge bg-success">Now Showing</span>' :
+        '<span class="badge bg-info">Coming Soon</span>';
+    return `
+    <div class="col-md-4 col-sm-6">
+        <div class="card movie-card h-100 shadow-sm border-0" onclick="window.location='/movies/${movie.id}'" style="cursor:pointer">
+            <div class="card-img-top bg-dark text-white d-flex align-items-center justify-content-center" style="height: 250px;">
+                ${movie.posterUrl ? `<img src="${movie.posterUrl}" alt="${movie.title}" class="img-fluid h-100 w-100" style="object-fit:cover">` : `<div class="text-center p-3"><i class="fas fa-film fa-3x mb-2"></i><br>${movie.title}</div>`}
+            </div>
+            <div class="card-body">
+                <h6 class="card-title mb-1">${movie.title}</h6>
+                <small class="text-muted">${movie.genre} | ${movie.language} | ${movie.duration}min</small>
+                <div class="mt-2">${rating} ${statusBadge} <span class="badge bg-secondary">${movie.certification}</span></div>
+                <p class="text-muted small mt-2 mb-0">${movie.description ? movie.description.substring(0, 100) + '...' : ''}</p>
+            </div>
+        </div>
+    </div>`;
+}
+
+async function loadAllMovies() {
+    const [nowRes, upRes] = await Promise.all([
+        fetch('/api/movies/browse/now-showing'),
+        fetch('/api/movies/browse/upcoming')
+    ]);
+    const nowData = await nowRes.json();
+    const upData = await upRes.json();
+    allMovies = [...(nowData.data || []), ...(upData.data || [])];
+    displayMovies(allMovies);
+
+    // Check for search param
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get('search');
+    if (search) {
+        document.getElementById('searchInput').value = search;
+        applyFilters();
+    }
+}
+
+function displayMovies(movies) {
+    const grid = document.getElementById('movieGrid');
+    document.getElementById('resultCount').textContent = movies.length + ' movie(s)';
+    if (movies.length === 0) {
+        grid.innerHTML = '<div class="col-12 text-center py-5"><p class="text-muted">No movies found</p></div>';
+    } else {
+        grid.innerHTML = movies.map(renderMovieCard).join('');
+    }
+}
+
+function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const genre = document.getElementById('genreFilter').value.toLowerCase();
+    const lang = document.getElementById('langFilter').value.toLowerCase();
+    const status = document.getElementById('statusFilter').value;
+
+    let filtered = allMovies.filter(m => {
+        if (search && !(m.title.toLowerCase().includes(search) || m.genre.toLowerCase().includes(search) ||
+            m.language.toLowerCase().includes(search) || (m.director && m.director.toLowerCase().includes(search)))) return false;
+        if (genre && !m.genre.toLowerCase().includes(genre)) return false;
+        if (lang && m.language.toLowerCase() !== lang) return false;
+        if (status === 'now-showing' && m.status !== 'NOW_SHOWING') return false;
+        if (status === 'upcoming' && m.status !== 'UPCOMING') return false;
+        return true;
+    });
+
+    document.getElementById('resultsTitle').textContent = search ? `Search: "${search}"` : 'All Movies';
+    displayMovies(filtered);
+}
+
+document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') applyFilters(); });
+
+loadAllMovies();
+</script>
+</body>
+</html>

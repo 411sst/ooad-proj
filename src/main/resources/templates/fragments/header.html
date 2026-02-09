@@ -44,6 +44,7 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
                         <li><a class="dropdown-item" href="/bookings"><i class="fas fa-ticket-alt me-2"></i>My Bookings</a></li>
+                        <li id="adminLink" class="d-none"><a class="dropdown-item" href="/admin"><i class="fas fa-cog me-2"></i>Admin Panel</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                     </ul>
@@ -57,11 +58,15 @@
     document.addEventListener('DOMContentLoaded', function() {
         const token = localStorage.getItem('accessToken');
         const userName = localStorage.getItem('userName');
+        const userRole = localStorage.getItem('userRole');
         if (token && userName) {
             document.getElementById('loginNav').classList.add('d-none');
             document.getElementById('registerNav').classList.add('d-none');
             document.getElementById('userNav').classList.remove('d-none');
             document.getElementById('userName').textContent = userName;
+            if (userRole === 'ADMIN' || userRole === 'MANAGER') {
+                document.getElementById('adminLink').classList.remove('d-none');
+            }
         }
     });
 

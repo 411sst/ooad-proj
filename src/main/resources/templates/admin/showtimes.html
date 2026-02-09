@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Manage Showtimes')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white"><h6 class="mb-0"><i class="fas fa-cog me-1"></i>Admin Panel</h6></div>
+                <div class="list-group list-group-flush">
+                    <a href="/admin" class="list-group-item list-group-item-action"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/movies" class="list-group-item list-group-item-action"><i class="fas fa-film me-2"></i>Movies</a>
+                    <a href="/admin/theaters" class="list-group-item list-group-item-action"><i class="fas fa-building me-2"></i>Theaters</a>
+                    <a href="/admin/showtimes" class="list-group-item list-group-item-action active"><i class="fas fa-calendar me-2"></i>Showtimes</a>
+                    <a href="/admin/users" class="list-group-item list-group-item-action"><i class="fas fa-users me-2"></i>Users</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3><i class="fas fa-calendar me-2"></i>Manage Showtimes</h3>
+                <button class="btn btn-info" onclick="toggleForm()"><i class="fas fa-plus me-1"></i>Add Showtime</button>
+            </div>
+
+            <!-- Add Form -->
+            <div id="showtimeForm" class="card shadow-sm mb-4 d-none">
+                <div class="card-header"><h6 class="mb-0">Add Showtime</h6></div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Movie</label>
+                            <select class="form-select" id="sMovie"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Theater</label>
+                            <select class="form-select" id="sTheater" onchange="loadScreens()"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Screen</label>
+                            <select class="form-select" id="sScreen"></select>
+                        </div>
+                        <div class="col-md-3"><label class="form-label">Date</label><input type="date" class="form-control" id="sDate"></div>
+                        <div class="col-md-3"><label class="form-label">Time</label><input type="time" class="form-control" id="sTime"></div>
+                        <div class="col-md-3"><label class="form-label">Base Price (₹)</label><input type="number" class="form-control" id="sPrice" value="200"></div>
+                        <div class="col-md-3">
+                            <label class="form-label">Pricing Strategy</label>
+                            <select class="form-select" id="sStrategy">
+                                <option value="DYNAMIC">Dynamic (all strategies)</option>
+                                <option value="STANDARD">Standard (no adjustments)</option>
+                                <option value="PEAK_HOUR">Peak Hour only</option>
+                                <option value="WEEKEND">Weekend only</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-info" onclick="createShowtime()">Create Showtime</button>
+                        <button class="btn btn-secondary" onclick="toggleForm()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Showtimes Filter -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <div class="row align-items-end g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Filter by Date</label>
+                            <input type="date" class="form-control" id="filterDate">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary w-100" onclick="loadShowtimes()">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="showtimesList">
+                <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const token = localStorage.getItem('accessToken');
+if (!token) { window.location.href = '/login'; }
+
+let theaters = [];
+
+function toggleForm() { document.getElementById('showtimeForm').classList.toggle('d-none'); }
+
+async function loadFormData() {
+    const [moviesRes, theatersRes] = await Promise.all([
+        fetch('/api/admin/movies', { headers: { 'Authorization': 'Bearer ' + token }}),
+        fetch('/api/admin/theaters', { headers: { 'Authorization': 'Bearer ' + token }})
+    ]);
+    const moviesData = await moviesRes.json();
+    const theatersData = await theatersRes.json();
+
+    if (moviesData.success) {
+        document.getElementById('sMovie').innerHTML = moviesData.data.map(m =>
+            `<option value="${m.id}">${m.title} (${m.language})</option>`
+        ).join('');
+    }
+    if (theatersData.success) {
+        theaters = theatersData.data;
+        document.getElementById('sTheater').innerHTML = theaters.map(t =>
+            `<option value="${t.id}">${t.name} (${t.theaterType})</option>`
+        ).join('');
+        loadScreens();
+    }
+
+    // Set default date to today
+    document.getElementById('sDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('filterDate').value = new Date().toISOString().split('T')[0];
+}
+
+async function loadScreens() {
+    const theaterId = document.getElementById('sTheater').value;
+    const res = await fetch(`/api/admin/theaters/${theaterId}`, { headers: { 'Authorization': 'Bearer ' + token }});
+    const data = await res.json();
+    if (data.success && data.data.screens) {
+        document.getElementById('sScreen').innerHTML = data.data.screens.map(s =>
+            `<option value="${s.id}">${s.screenName} (${s.screenType}, ${s.totalSeats} seats)</option>`
+        ).join('');
+    }
+}
+
+async function loadShowtimes() {
+    const date = document.getElementById('filterDate').value;
+    if (!date) return;
+    const res = await fetch(`/api/showtimes/movie/0/date/${date}`);
+    // Since we don't have a "get all showtimes by date" public API, use theater-based approach
+    let allShowtimes = [];
+    for (const t of theaters) {
+        const r = await fetch(`/api/showtimes/theater/${t.id}/date/${date}`);
+        const d = await r.json();
+        if (d.success) allShowtimes.push(...d.data);
+    }
+
+    const container = document.getElementById('showtimesList');
+    if (allShowtimes.length > 0) {
+        container.innerHTML = `
+        <div class="card shadow-sm"><div class="card-body"><div class="table-responsive">
+            <table class="table table-hover">
+                <thead><tr><th>Movie</th><th>Theater</th><th>Screen</th><th>Date</th><th>Time</th><th>Price</th><th>Available</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>${allShowtimes.map(s => `
+                    <tr>
+                        <td>${s.movieTitle}</td><td>${s.theaterName}</td><td>${s.screenName}</td>
+                        <td>${s.showDate}</td><td>${s.showTime}</td><td>₹${s.basePrice}</td>
+                        <td>${s.availableSeats}/${s.totalSeats}</td>
+                        <td><span class="badge bg-${s.status === 'ACTIVE' ? 'success' : 'danger'}">${s.status}</span></td>
+                        <td>${s.status === 'ACTIVE' ? `<button class="btn btn-sm btn-outline-danger" onclick="cancelShowtime(${s.id})">Cancel</button>` : ''}</td>
+                    </tr>
+                `).join('')}</tbody>
+            </table>
+        </div></div></div>`;
+    } else {
+        container.innerHTML = '<p class="text-muted text-center">No showtimes for this date</p>';
+    }
+}
+
+async function createShowtime() {
+    const body = {
+        movieId: parseInt(document.getElementById('sMovie').value),
+        screenId: parseInt(document.getElementById('sScreen').value),
+        showDate: document.getElementById('sDate').value,
+        showTime: document.getElementById('sTime').value + ':00',
+        basePrice: parseFloat(document.getElementById('sPrice').value),
+        pricingStrategy: document.getElementById('sStrategy').value
+    };
+
+    const res = await fetch('/api/admin/showtimes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (data.success) { toggleForm(); loadShowtimes(); alert('Showtime created!'); }
+    else { alert(data.message); }
+}
+
+async function cancelShowtime(id) {
+    if (!confirm('Cancel this showtime?')) return;
+    await fetch(`/api/admin/showtimes/${id}`, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token }});
+    loadShowtimes();
+}
+
+loadFormData();
+loadShowtimes();
+</script>
+</body>
+</html>

@@ -51,4 +51,39 @@ public class HomeController {
     public String profilePage() {
         return "profile";
     }
+
+    @GetMapping("/movies")
+    public String moviesPage() {
+        return "movies";
+    }
+
+    @GetMapping("/movies/{id}")
+    public String movieDetailPage(@PathVariable Long id) {
+        return "movie-detail";
+    }
+
+    @GetMapping("/admin")
+    public String adminDashboard() {
+        return "admin/dashboard";
+    }
+
+    @GetMapping("/admin/movies")
+    public String adminMovies() {
+        return "admin/movies";
+    }
+
+    @GetMapping("/admin/theaters")
+    public String adminTheaters() {
+        return "admin/theaters";
+    }
+
+    @GetMapping("/admin/showtimes")
+    public String adminShowtimes() {
+        return "admin/showtimes";
+    }
+
+    @GetMapping("/admin/users")
+    public String adminUsers() {
+        return "admin/users";
+    }
 }

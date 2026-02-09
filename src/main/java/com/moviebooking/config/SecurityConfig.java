@@ -49,7 +49,9 @@ public class SecurityConfig {
                 // Public endpoints
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/movies/browse/**", "/api/movies/search/**").permitAll()
-                .requestMatchers("/api/showtimes/movie/**").permitAll()
+                .requestMatchers("/api/showtimes/**").permitAll()
+                .requestMatchers("/api/reviews/movie/**").permitAll()
+                .requestMatchers("/api/theaters/browse/**").permitAll()
                 // Static resources and Thymeleaf pages
                 .requestMatchers("/", "/login", "/register", "/movies/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()

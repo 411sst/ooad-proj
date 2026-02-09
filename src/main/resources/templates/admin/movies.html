@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Manage Movies')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white"><h6 class="mb-0"><i class="fas fa-cog me-1"></i>Admin Panel</h6></div>
+                <div class="list-group list-group-flush">
+                    <a href="/admin" class="list-group-item list-group-item-action"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="/admin/movies" class="list-group-item list-group-item-action active"><i class="fas fa-film me-2"></i>Movies</a>
+                    <a href="/admin/theaters" class="list-group-item list-group-item-action"><i class="fas fa-building me-2"></i>Theaters</a>
+                    <a href="/admin/showtimes" class="list-group-item list-group-item-action"><i class="fas fa-calendar me-2"></i>Showtimes</a>
+                    <a href="/admin/users" class="list-group-item list-group-item-action"><i class="fas fa-users me-2"></i>Users</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3><i class="fas fa-film me-2"></i>Manage Movies</h3>
+                <button class="btn btn-primary" onclick="showAddForm()"><i class="fas fa-plus me-1"></i>Add Movie</button>
+            </div>
+
+            <!-- Add/Edit Form -->
+            <div id="movieForm" class="card shadow-sm mb-4 d-none">
+                <div class="card-header"><h6 class="mb-0" id="formTitle">Add Movie</h6></div>
+                <div class="card-body">
+                    <input type="hidden" id="editMovieId">
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="form-label">Title</label><input class="form-control" id="mTitle"></div>
+                        <div class="col-md-3"><label class="form-label">Genre</label><input class="form-control" id="mGenre" placeholder="Action, Drama..."></div>
+                        <div class="col-md-3"><label class="form-label">Language</label><input class="form-control" id="mLanguage" placeholder="English, Hindi..."></div>
+                        <div class="col-md-3"><label class="form-label">Duration (min)</label><input type="number" class="form-control" id="mDuration"></div>
+                        <div class="col-md-3"><label class="form-label">Certification</label>
+                            <select class="form-select" id="mCert"><option>U</option><option>UA</option><option>A</option><option>U/A</option></select>
+                        </div>
+                        <div class="col-md-3"><label class="form-label">Release Date</label><input type="date" class="form-control" id="mRelease"></div>
+                        <div class="col-md-3"><label class="form-label">IMDb Rating</label><input type="number" step="0.1" class="form-control" id="mImdb"></div>
+                        <div class="col-md-4"><label class="form-label">Director</label><input class="form-control" id="mDirector"></div>
+                        <div class="col-md-4"><label class="form-label">Producer</label><input class="form-control" id="mProducer"></div>
+                        <div class="col-md-4"><label class="form-label">Status</label>
+                            <select class="form-select" id="mStatus"><option>NOW_SHOWING</option><option>UPCOMING</option><option>ENDED</option></select>
+                        </div>
+                        <div class="col-md-6"><label class="form-label">Poster URL</label><input class="form-control" id="mPoster"></div>
+                        <div class="col-md-6"><label class="form-label">Trailer URL</label><input class="form-control" id="mTrailer"></div>
+                        <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" id="mDesc" rows="2"></textarea></div>
+                        <div class="col-12"><label class="form-label">Synopsis</label><textarea class="form-control" id="mSynopsis" rows="3"></textarea></div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="saveMovie()">Save Movie</button>
+                        <button class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movies Table -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead><tr><th>ID</th><th>Title</th><th>Genre</th><th>Language</th><th>Duration</th><th>Status</th><th>Rating</th><th>Actions</th></tr></thead>
+                            <tbody id="moviesTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const token = localStorage.getItem('accessToken');
+if (!token) { window.location.href = '/login'; }
+
+async function loadMovies() {
+    const res = await fetch('/api/admin/movies', { headers: { 'Authorization': 'Bearer ' + token }});
+    const data = await res.json();
+    if (data.success) {
+        document.getElementById('moviesTable').innerHTML = data.data.map(m => `
+            <tr>
+                <td>${m.id}</td>
+                <td><strong>${m.title}</strong></td>
+                <td>${m.genre}</td>
+                <td>${m.language}</td>
+                <td>${m.duration}min</td>
+                <td><span class="badge bg-${m.status === 'NOW_SHOWING' ? 'success' : m.status === 'UPCOMING' ? 'warning' : 'secondary'}">${m.status}</span></td>
+                <td>${m.imdbRating || '-'}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" onclick='editMovie(${JSON.stringify(m)})'>Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteMovie(${m.id})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+}
+
+function showAddForm() { document.getElementById('movieForm').classList.remove('d-none'); document.getElementById('formTitle').textContent = 'Add Movie'; document.getElementById('editMovieId').value = ''; }
+function hideForm() { document.getElementById('movieForm').classList.add('d-none'); }
+
+function editMovie(m) {
+    showAddForm();
+    document.getElementById('formTitle').textContent = 'Edit Movie';
+    document.getElementById('editMovieId').value = m.id;
+    document.getElementById('mTitle').value = m.title || '';
+    document.getElementById('mGenre').value = m.genre || '';
+    document.getElementById('mLanguage').value = m.language || '';
+    document.getElementById('mDuration').value = m.duration || '';
+    document.getElementById('mCert').value = m.certification || 'U';
+    document.getElementById('mRelease').value = m.releaseDate || '';
+    document.getElementById('mImdb').value = m.imdbRating || '';
+    document.getElementById('mDirector').value = m.director || '';
+    document.getElementById('mProducer').value = m.producer || '';
+    document.getElementById('mStatus').value = m.status || 'UPCOMING';
+    document.getElementById('mPoster').value = m.posterUrl || '';
+    document.getElementById('mTrailer').value = m.trailerUrl || '';
+    document.getElementById('mDesc').value = m.description || '';
+    document.getElementById('mSynopsis').value = m.synopsis || '';
+}
+
+async function saveMovie() {
+    const id = document.getElementById('editMovieId').value;
+    const body = {
+        title: document.getElementById('mTitle').value,
+        genre: document.getElementById('mGenre').value,
+        language: document.getElementById('mLanguage').value,
+        duration: parseInt(document.getElementById('mDuration').value),
+        certification: document.getElementById('mCert').value,
+        releaseDate: document.getElementById('mRelease').value,
+        imdbRating: parseFloat(document.getElementById('mImdb').value) || null,
+        director: document.getElementById('mDirector').value,
+        producer: document.getElementById('mProducer').value,
+        status: document.getElementById('mStatus').value,
+        posterUrl: document.getElementById('mPoster').value,
+        trailerUrl: document.getElementById('mTrailer').value,
+        description: document.getElementById('mDesc').value,
+        synopsis: document.getElementById('mSynopsis').value
+    };
+
+    const url = id ? `/api/admin/movies/${id}` : '/api/admin/movies';
+    const method = id ? 'PUT' : 'POST';
+
+    const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(body) });
+    const data = await res.json();
+    if (data.success) { hideForm(); loadMovies(); } else { alert(data.message); }
+}
+
+async function deleteMovie(id) {
+    if (!confirm('Delete this movie?')) return;
+    await fetch(`/api/admin/movies/${id}`, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token }});
+    loadMovies();
+}
+
+loadMovies();
+</script>
+</body>
+</html>
