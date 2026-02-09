@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Payment')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<div class="container py-4">
+    <div class="row">
+        <!-- Payment Form -->
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-credit-card me-2"></i>Payment</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-3">Select Payment Method</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6"><div class="payment-method-card p-3 text-center rounded" onclick="selectMethod('CREDIT_CARD')"><i class="fas fa-credit-card fa-2x mb-2 text-primary"></i><br>Credit Card</div></div>
+                        <div class="col-6"><div class="payment-method-card p-3 text-center rounded" onclick="selectMethod('DEBIT_CARD')"><i class="fas fa-credit-card fa-2x mb-2 text-info"></i><br>Debit Card</div></div>
+                        <div class="col-6"><div class="payment-method-card p-3 text-center rounded" onclick="selectMethod('UPI')"><i class="fas fa-mobile-alt fa-2x mb-2 text-success"></i><br>UPI</div></div>
+                        <div class="col-6"><div class="payment-method-card p-3 text-center rounded" onclick="selectMethod('NET_BANKING')"><i class="fas fa-university fa-2x mb-2 text-warning"></i><br>Net Banking</div></div>
+                    </div>
+
+                    <!-- Card Form -->
+                    <div id="cardForm" class="d-none">
+                        <div class="mb-3"><label class="form-label">Card Number</label><input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19"></div>
+                        <div class="row mb-3">
+                            <div class="col-6"><label class="form-label">Expiry</label><input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY"></div>
+                            <div class="col-6"><label class="form-label">CVV</label><input type="password" class="form-control" id="cardCvv" placeholder="123" maxlength="4"></div>
+                        </div>
+                        <div class="mb-3"><label class="form-label">Cardholder Name</label><input type="text" class="form-control" id="cardName" placeholder="Name on card"></div>
+                        <div class="alert alert-info"><small><strong>Test cards:</strong> Ending 0000 = Success | 1111 = Fail | 2222 = Random</small></div>
+                    </div>
+
+                    <!-- UPI Form -->
+                    <div id="upiForm" class="d-none">
+                        <div class="mb-3"><label class="form-label">UPI ID</label><input type="text" class="form-control" id="upiId" placeholder="yourname@upi"></div>
+                    </div>
+
+                    <!-- Net Banking Form -->
+                    <div id="nbForm" class="d-none">
+                        <div class="mb-3"><label class="form-label">Select Bank</label>
+                            <select class="form-select" id="bankName">
+                                <option value="">Choose bank...</option>
+                                <option>State Bank of India</option>
+                                <option>HDFC Bank</option>
+                                <option>ICICI Bank</option>
+                                <option>Axis Bank</option>
+                                <option>Kotak Mahindra Bank</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="errorAlert" class="alert alert-danger d-none"></div>
+
+                    <button id="payBtn" class="btn btn-success btn-lg w-100 d-none" onclick="processPayment()">
+                        <span id="payText">Pay Now</span>
+                        <span id="paySpinner" class="spinner-border spinner-border-sm d-none ms-2"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white"><h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Order Summary</h5></div>
+                <div class="card-body" id="orderSummary"><div class="text-center"><div class="spinner-border"></div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const bookingId = window.location.pathname.split('/').pop();
+const token = localStorage.getItem('accessToken');
+let selectedMethod = null;
+let bookingData = null;
+
+if (!token) { window.location.href = '/login'; }
+
+async function loadBooking() {
+    const res = await fetch(`/api/bookings/${bookingId}`, { headers: {'Authorization': 'Bearer ' + token }});
+    const data = await res.json();
+    if (data.success) {
+        bookingData = data.data;
+        document.getElementById('orderSummary').innerHTML = `
+            <h6>${bookingData.movieTitle}</h6>
+            <p class="text-muted mb-2">${bookingData.theaterName} | ${bookingData.screenName}</p>
+            <p class="text-muted mb-2"><i class="fas fa-calendar me-1"></i>${new Date(bookingData.showDatetime).toLocaleString()}</p>
+            <p class="mb-2"><i class="fas fa-chair me-1"></i>${bookingData.seatLabels.join(', ')}</p>
+            <hr>
+            <div class="d-flex justify-content-between"><span>Tickets (${bookingData.numSeats})</span><span>₹${bookingData.ticketAmount}</span></div>
+            <div class="d-flex justify-content-between"><span>Food & Beverages</span><span>₹${bookingData.foodAmount}</span></div>
+            <div class="d-flex justify-content-between"><span>GST (18%)</span><span>₹${bookingData.taxAmount}</span></div>
+            ${parseFloat(bookingData.discountAmount) > 0 ? `<div class="d-flex justify-content-between text-success"><span>Discount</span><span>-₹${bookingData.discountAmount}</span></div>` : ''}
+            <hr>
+            <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span class="text-success">₹${bookingData.totalAmount}</span></div>
+        `;
+    }
+}
+
+function selectMethod(method) {
+    selectedMethod = method;
+    document.querySelectorAll('.payment-method-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+
+    document.getElementById('cardForm').classList.add('d-none');
+    document.getElementById('upiForm').classList.add('d-none');
+    document.getElementById('nbForm').classList.add('d-none');
+    document.getElementById('payBtn').classList.remove('d-none');
+    document.getElementById('errorAlert').classList.add('d-none');
+
+    if (method === 'CREDIT_CARD' || method === 'DEBIT_CARD') document.getElementById('cardForm').classList.remove('d-none');
+    else if (method === 'UPI') document.getElementById('upiForm').classList.remove('d-none');
+    else if (method === 'NET_BANKING') document.getElementById('nbForm').classList.remove('d-none');
+
+    document.getElementById('payText').textContent = `Pay ₹${bookingData.totalAmount}`;
+}
+
+async function processPayment() {
+    const btn = document.getElementById('payBtn');
+    const spinner = document.getElementById('paySpinner');
+    const errorAlert = document.getElementById('errorAlert');
+    btn.disabled = true;
+    spinner.classList.remove('d-none');
+    errorAlert.classList.add('d-none');
+
+    const body = { bookingId: parseInt(bookingId), paymentMethod: selectedMethod };
+
+    if (selectedMethod === 'CREDIT_CARD' || selectedMethod === 'DEBIT_CARD') {
+        body.cardNumber = document.getElementById('cardNumber').value;
+        body.cardExpiry = document.getElementById('cardExpiry').value;
+        body.cardCvv = document.getElementById('cardCvv').value;
+        body.cardHolderName = document.getElementById('cardName').value;
+    } else if (selectedMethod === 'UPI') {
+        body.upiId = document.getElementById('upiId').value;
+    } else if (selectedMethod === 'NET_BANKING') {
+        body.bankName = document.getElementById('bankName').value;
+    }
+
+    try {
+        const res = await fetch('/api/payments/process', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            window.location.href = '/booking/confirmation/' + bookingId;
+        } else {
+            errorAlert.textContent = data.message;
+            errorAlert.classList.remove('d-none');
+            btn.disabled = false;
+            spinner.classList.add('d-none');
+        }
+    } catch(e) {
+        errorAlert.textContent = 'Network error. Please try again.';
+        errorAlert.classList.remove('d-none');
+        btn.disabled = false;
+        spinner.classList.add('d-none');
+    }
+}
+
+loadBooking();
+</script>
+</body>
+</html>
