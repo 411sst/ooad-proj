@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('MovieBook - Home')}"></head>
+<body class="bg-light">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<!-- Hero Section -->
+<section class="hero-section text-white text-center py-5" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold mb-3">Book Your Movie Experience</h1>
+        <p class="lead mb-4">Real-time seat selection, dynamic pricing, and food pre-ordering - all in one place</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search movies, actors, genres...">
+                    <button class="btn btn-danger" onclick="searchMovies()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-chair fa-3x text-primary mb-3"></i>
+                        <h5>Real-time Seats</h5>
+                        <p class="text-muted">Live seat availability with WebSocket updates</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-tags fa-3x text-success mb-3"></i>
+                        <h5>Dynamic Pricing</h5>
+                        <p class="text-muted">Smart pricing based on demand, time, and seat zone</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-utensils fa-3x text-warning mb-3"></i>
+                        <h5>Food Pre-order</h5>
+                        <p class="text-muted">Pre-order snacks and beverages with your tickets</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-qrcode fa-3x text-info mb-3"></i>
+                        <h5>QR Code Tickets</h5>
+                        <p class="text-muted">Contactless entry with QR code verification</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Now Showing Placeholder -->
+<section class="py-4">
+    <div class="container">
+        <h2 class="mb-4"><i class="fas fa-fire text-danger me-2"></i>Now Showing</h2>
+        <div class="row g-4" id="nowShowingMovies">
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="text-muted mt-3">Movies will be loaded here in Section 2...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Coming Soon Placeholder -->
+<section class="py-4 bg-white">
+    <div class="container">
+        <h2 class="mb-4"><i class="fas fa-clock text-warning me-2"></i>Coming Soon</h2>
+        <div class="row g-4" id="comingSoonMovies">
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Upcoming movies will appear here...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script>
+function searchMovies() {
+    const query = document.getElementById('searchInput').value;
+    if (query.trim()) {
+        window.location.href = '/movies?search=' + encodeURIComponent(query);
+    }
+}
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') searchMovies();
+});
+</script>
+</body>
+</html>
