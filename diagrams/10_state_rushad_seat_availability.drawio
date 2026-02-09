@@ -1,0 +1,184 @@
+<mxfile host="app.diagrams.net" modified="2026-02-09" agent="Claude" version="24.0.0" type="device">
+  <diagram id="state-rushad" name="State Diagram - Seat Availability (Rushad)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="State Diagram: Seat Availability — Rushad" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="450" y="15" width="450" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- Initial -->
+        <mxCell id="start" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="630" y="65" width="30" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Available (GREEN) -->
+        <mxCell id="s_available" value="Available" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="510" y="140" width="270" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_available_i" value="entry / Set UI color to GREEN&#xa;do / Monitor for selection events&#xa;do / Listen for WebSocket updates" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_available">
+          <mxGeometry y="28" width="270" height="92" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Locked (YELLOW) -->
+        <mxCell id="s_locked" value="Locked" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="510" y="380" width="270" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_locked_i" value="entry / Set UI color to YELLOW&#xa;entry / Start 10-minute countdown&#xa;do / Monitor timer&#xa;do / Display lock owner info&#xa;exit / Clear timer" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_locked">
+          <mxGeometry y="28" width="270" height="112" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Booked (RED) -->
+        <mxCell id="s_booked" value="Booked" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="510" y="640" width="270" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_booked_i" value="entry / Set UI color to RED&#xa;entry / Mark seat non-selectable&#xa;do / Display booked status" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_booked">
+          <mxGeometry y="28" width="270" height="92" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Released -->
+        <mxCell id="s_released" value="Released" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="130" y="520" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_released_i" value="entry / Remove booking association&#xa;entry / Broadcast availability&#xa;entry / Notify waiting users" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_released">
+          <mxGeometry y="28" width="240" height="72" as="geometry"/>
+        </mxCell>
+
+        <!-- State: Unavailable (GRAY) -->
+        <mxCell id="s_unavail" value="Unavailable" style="swimlane;fontStyle=1;align=center;startSize=28;html=1;collapsible=0;rounded=1;arcSize=20;fillColor=#f5f5f5;strokeColor=#999999;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="940" y="240" width="240" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="s_unavail_i" value="entry / Set UI color to GRAY&#xa;entry / Mark non-selectable" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="s_unavail">
+          <mxGeometry y="28" width="240" height="72" as="geometry"/>
+        </mxCell>
+
+        <!-- Final -->
+        <mxCell id="end_inner" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="636" y="860" width="18" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="end_outer" value="" style="ellipse;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="631" y="855" width="28" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== TRANSITIONS ==================== -->
+
+        <!-- Initial -> Available -->
+        <mxCell id="t1" value="Showtime created&#xa;/ Generate seat with&#xa;AVAILABLE status" style="html=1;rounded=1;fontSize=9;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="start" target="s_available" parent="1"/>
+
+        <!-- Available -> Locked -->
+        <mxCell id="t2" value="User selects seat&#xa;[no existing lock]&#xa;/ Create seat_lock,&#xa;broadcast to all users" style="html=1;rounded=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="s_available" target="s_locked" parent="1"/>
+
+        <!-- Available -> Unavailable -->
+        <mxCell id="t3" value="Manager marks&#xa;unavailable" style="html=1;rounded=1;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="s_available" target="s_unavail" parent="1"/>
+
+        <!-- Locked -> Booked -->
+        <mxCell id="t4" value="Payment successful&#xa;/ Update booking_seats,&#xa;broadcast, remove lock" style="html=1;rounded=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="s_locked" target="s_booked" parent="1"/>
+
+        <!-- Locked -> Available (lock expires) -->
+        <mxCell id="t5" value="Lock expires (10 min)&#xa;/ Delete seat_lock,&#xa;broadcast to all" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;strokeColor=#d79b00;curved=1;" edge="1" parent="1">
+          <mxGeometry x="-0.1" y="-20" relative="1" as="geometry">
+            <mxPoint x="510" y="408" as="sourcePoint"/>
+            <mxPoint x="510" y="236" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="440" y="408"/>
+              <mxPoint x="440" y="236"/>
+            </Array>
+            <mxPoint as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Locked -> Available (user deselects) -->
+        <mxCell id="t6" value="User deselects&#xa;/ Delete seat_lock" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#d79b00;curved=1;" edge="1" parent="1">
+          <mxGeometry x="0.1" y="20" relative="1" as="geometry">
+            <mxPoint x="510" y="450" as="sourcePoint"/>
+            <mxPoint x="510" y="200" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="400" y="450"/>
+              <mxPoint x="400" y="200"/>
+            </Array>
+            <mxPoint as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Booked -> Released -->
+        <mxCell id="t7" value="User cancels booking&#xa;[showtime not started]&#xa;/ Delete booking_seats" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="s_booked" target="s_released" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="250" y="700"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Booked -> Final -->
+        <mxCell id="t8" value="Show completed&#xa;/ Archive booking data" style="html=1;rounded=1;fontSize=9;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="s_booked" target="end_outer" parent="1"/>
+
+        <!-- Released -> Available -->
+        <mxCell id="t9" value="/ Broadcast&#xa;seat availability" style="html=1;rounded=1;fontSize=9;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeColor=#82b366;fontColor=#82b366;" edge="1" source="s_released" target="s_available" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="250" y="260"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Unavailable -> Available -->
+        <mxCell id="t10" value="Manager marks fixed&#xa;/ Update status, broadcast" style="html=1;rounded=1;fontSize=9;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;strokeColor=#82b366;fontColor=#82b366;curved=1;" edge="1" source="s_unavail" target="s_available" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="900" y="150"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="note1" value="Observer Pattern:&#xa;All connected clients notified&#xa;on every state change via&#xa;WebSocket broadcast" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="940" y="440" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="note2" value="10-minute timer prevents&#xa;indefinite seat locking.&#xa;SeatLockScheduler runs&#xa;every 60 seconds." style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="940" y="550" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="note3" value="Race conditions prevented&#xa;by DB unique constraints&#xa;on seat_locks table" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="940" y="660" width="190" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="nc1" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" source="note1" target="s_locked" parent="1"/>
+        <mxCell id="nc2" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" source="note2" target="s_locked" parent="1"/>
+        <mxCell id="nc3" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" source="note3" target="s_booked" parent="1"/>
+
+        <!-- Concurrent Regions box -->
+        <mxCell id="concurrent" value="&lt;b&gt;Concurrent Regions&lt;/b&gt;&#xa;UI Region: controls color/appearance&#xa;Data Region: controls DB status&#xa;Both synced via Observer Pattern" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;fillColor=#f9f9f9;strokeColor=#999999;fontSize=10;align=left;verticalAlign=top;spacingTop=5;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="180" width="240" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="leg_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f9f9f9;strokeColor=#cccccc;" vertex="1" parent="1">
+          <mxGeometry x="80" y="310" width="250" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg_title" value="Seat Color Legend" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="140" y="315" width="130" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="100" y="342" width="25" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1" value="GREEN = Available" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;fontStyle=1;fontColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="135" y="339" width="130" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="100" y="365" width="25" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2" value="YELLOW = Locked" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="135" y="362" width="130" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="100" y="388" width="25" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3" value="RED = Booked" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;fontStyle=1;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="135" y="385" width="130" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg4c" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="100" y="411" width="25" height="16" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg4" value="GRAY = Unavailable" style="text;html=1;align=left;fontSize=10;strokeColor=none;fillColor=none;fontStyle=1;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="135" y="408" width="140" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

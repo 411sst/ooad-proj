@@ -1,0 +1,266 @@
+<mxfile host="app.diagrams.net" modified="2026-02-09" agent="Claude" version="24.0.0" type="device">
+  <diagram id="activity-shrish" name="Activity Diagram - Seat Selection (Shrish)">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Activity Diagram: Seat Selection &amp; Booking — Shrish" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="500" y="10" width="500" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- Swimlane backgrounds -->
+        <mxCell id="lane1_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=30;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="20" y="55" width="340" height="1380" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane1_hdr" value="Customer" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=#6c8ebf;fontSize=14;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="60" width="180" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lane2_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=30;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="370" y="55" width="340" height="1380" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane2_hdr" value="Seat Selection System" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=#82b366;fontSize=14;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="60" width="240" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lane3_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;opacity=30;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="720" y="55" width="340" height="1380" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane3_hdr" value="WebSocket Server" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=#d79b00;fontSize=14;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="790" y="60" width="200" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lane4_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;opacity=30;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="55" width="340" height="1380" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane4_hdr" value="Database" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=#d6b656;fontSize=14;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="60" width="140" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lane5_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;opacity=30;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="55" width="340" height="1380" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane5_hdr" value="Other Connected Users" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=#9673a6;fontSize=14;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="60" width="240" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Initial node -->
+        <mxCell id="start" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="175" y="105" width="30" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Activities -->
+        <mxCell id="a1" value="Navigate to Seat&#xa;Selection Page" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a2" value="Load Showtime&#xa;Details" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="445" y="160" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a3" value="Query Seats&#xa;for Showtime" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="160" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a4" value="Fetch Current&#xa;Seat Availability" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="445" y="240" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a5" value="Check Seat&#xa;Locks Table" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="240" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a6" value="Display Seat Map&#xa;with Color Codes" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="445" y="320" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a7" value="View Seat Map&#xa;(Green/Yellow/Red)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="320" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a8" value="Click on&#xa;Available Seats" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="400" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a9" value="Validate Seat&#xa;Selection" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="450" y="400" width="160" height="42" as="geometry"/>
+        </mxCell>
+
+        <!-- Decision: Seat Available? -->
+        <mxCell id="d1" value="Seat&#xa;Available?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="475" width="110" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a_err1" value="Show Error:&#xa;Seat Unavailable" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="485" width="140" height="42" as="geometry"/>
+        </mxCell>
+
+        <!-- Decision: Seats <= 10? -->
+        <mxCell id="d2" value="Seats&#xa;≤ 10?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="575" width="110" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a_err2" value="Show Error:&#xa;Max 10 Seats" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="660" y="585" width="140" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a10" value="Lock Selected Seats&#xa;(10-min Timer)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="675" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <!-- Fork bar -->
+        <mxCell id="fork" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="400" y="745" width="850" height="6" as="geometry"/>
+        </mxCell>
+
+        <!-- Parallel branch activities -->
+        <mxCell id="a11" value="Calculate&#xa;Total Price" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="450" y="785" width="160" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a12" value="Receive Seat&#xa;Lock Event" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="785" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a13" value="Insert&#xa;Seat Locks" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="785" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a14" value="Broadcast Seat&#xa;Status Update" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="800" y="860" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a15" value="Receive WebSocket&#xa;Message" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="860" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a16" value="Update Seat&#xa;Map UI" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="930" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a17" value="Show Seats as&#xa;Locked (Yellow)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="1000" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <!-- Join bar -->
+        <mxCell id="join" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1070" width="850" height="6" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a18" value="Create Booking Record&#xa;(PENDING Status)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="435" y="1110" width="190" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a19" value="Insert Booking&#xa;Record" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="1110" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a20" value="Review Selected&#xa;Seats and Price" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1190" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a21" value="Click 'Proceed&#xa;to Payment'" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1265" width="180" height="42" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a22" value="Redirect to&#xa;Payment Page" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="445" y="1265" width="170" height="42" as="geometry"/>
+        </mxCell>
+
+        <!-- Final node -->
+        <mxCell id="end_inner" value="" style="ellipse;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="182" y="1350" width="18" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="end_outer" value="" style="ellipse;html=1;aspect=fixed;fillColor=none;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="177" y="1345" width="28" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="note1" value="Observer Pattern:&#xa;Broadcasts to all&#xa;connected observers&#xa;via WebSocket" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="640" y="670" width="150" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="note2" value="State Pattern:&#xa;Booking starts in&#xa;PENDING state" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1105" width="140" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="note3" value="Seat locks expire&#xa;after 10 min via&#xa;SeatLockScheduler" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#ffffcc;strokeColor=#d6b656;fontSize=9;shadow=1;align=left;" vertex="1" parent="1">
+          <mxGeometry x="240" y="740" width="140" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- ==================== ARROWS ==================== -->
+        <mxCell id="e1" style="html=1;rounded=1;" edge="1" source="start" target="a1" parent="1"/>
+        <mxCell id="e2" style="html=1;rounded=1;" edge="1" source="a1" target="a2" parent="1"/>
+        <mxCell id="e3" style="html=1;rounded=1;" edge="1" source="a2" target="a3" parent="1"/>
+        <mxCell id="e4" style="html=1;rounded=1;" edge="1" source="a3" target="a4" parent="1"/>
+        <mxCell id="e5" style="html=1;rounded=1;" edge="1" source="a4" target="a5" parent="1"/>
+        <mxCell id="e6" style="html=1;rounded=1;" edge="1" source="a5" target="a6" parent="1"/>
+        <mxCell id="e7" style="html=1;rounded=1;" edge="1" source="a6" target="a7" parent="1"/>
+        <mxCell id="e8" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="a7" target="a8" parent="1"/>
+        <mxCell id="e9" style="html=1;rounded=1;" edge="1" source="a8" target="a9" parent="1"/>
+        <mxCell id="e10" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="a9" target="d1" parent="1"/>
+
+        <!-- Decision 1 flows -->
+        <mxCell id="e11_yes" value="Yes" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontStyle=1;fontSize=10;fontColor=#82b366;" edge="1" source="d1" target="d2" parent="1"/>
+        <mxCell id="e11_no" value="No" style="html=1;rounded=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=1;fontSize=10;fontColor=#b85450;" edge="1" source="d1" target="a_err1" parent="1"/>
+        <mxCell id="e11_err_back" style="html=1;rounded=1;dashed=1;strokeColor=#b85450;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="a_err1" target="a7" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="820" y="341"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Decision 2 flows -->
+        <mxCell id="e12_yes" value="Yes" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontStyle=1;fontSize=10;fontColor=#82b366;" edge="1" source="d2" target="a10" parent="1"/>
+        <mxCell id="e12_no" value="No" style="html=1;rounded=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontStyle=1;fontSize=10;fontColor=#b85450;" edge="1" source="d2" target="a_err2" parent="1"/>
+        <mxCell id="e12_err_back" style="html=1;rounded=1;dashed=1;strokeColor=#b85450;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" source="a_err2" target="a7" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="820" y="362"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- To Fork -->
+        <mxCell id="e13" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="a10" target="fork" parent="1"/>
+
+        <!-- Fork branches -->
+        <mxCell id="e14a" style="html=1;rounded=1;" edge="1" source="fork" target="a11" parent="1"/>
+        <mxCell id="e14b" style="html=1;rounded=1;" edge="1" source="fork" target="a12" parent="1"/>
+        <mxCell id="e14c" style="html=1;rounded=1;" edge="1" source="fork" target="a13" parent="1"/>
+
+        <!-- WebSocket flow -->
+        <mxCell id="e15" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="a12" target="a14" parent="1"/>
+        <mxCell id="e16" style="html=1;rounded=1;" edge="1" source="a14" target="a15" parent="1"/>
+        <mxCell id="e17" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="a15" target="a16" parent="1"/>
+        <mxCell id="e18" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="a16" target="a17" parent="1"/>
+
+        <!-- To Join -->
+        <mxCell id="e19a" style="html=1;rounded=1;" edge="1" source="a11" target="join" parent="1"/>
+        <mxCell id="e19b" style="html=1;rounded=1;" edge="1" source="a13" target="join" parent="1"/>
+        <mxCell id="e19c" style="html=1;rounded=1;" edge="1" source="a17" target="join" parent="1"/>
+
+        <!-- After join -->
+        <mxCell id="e20" style="html=1;rounded=1;" edge="1" source="join" target="a18" parent="1"/>
+        <mxCell id="e21" style="html=1;rounded=1;" edge="1" source="a18" target="a19" parent="1"/>
+        <mxCell id="e22" style="html=1;rounded=1;" edge="1" source="a19" target="a20" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1235" y="1190"/><mxPoint x="280" y="1190"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23" style="html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="a20" target="a21" parent="1"/>
+        <mxCell id="e24" style="html=1;rounded=1;" edge="1" source="a21" target="a22" parent="1"/>
+        <mxCell id="e25" style="html=1;rounded=1;exitX=0;exitY=1;exitDx=0;exitDy=0;" edge="1" source="a22" target="end_outer" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="445" y="1359"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note connectors -->
+        <mxCell id="ne1" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" source="note1" target="a10" parent="1"/>
+        <mxCell id="ne2" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" source="note2" target="a18" parent="1"/>
+        <mxCell id="ne3" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" source="note3" target="fork" parent="1"/>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
